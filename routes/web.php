@@ -83,10 +83,42 @@ Route::get('/product', function () {
 
 // Route Storage Location
 Route::get('/storage-location', function () {
-    return view('StorageLocation.index');
+    $data = [
+        [
+        'id' => 1,
+        'kode_sloc' => 3001,
+        'nama_sloc' => 'Gudang RM 86'
+        ],
+        [
+        'id' => 2,
+        'kode_sloc' => 3002,
+        'nama_sloc' => 'Gudang RM 88'
+        ],
+    ];
+
+    return view('StorageLocation.index', [
+        'title' => 'Storage Location',
+        'data' => $data
+    ]);
 })->name('sloc');
 
 // Route Storage Bin
 Route::get('/storage-bin', function () {
-    return view('StorageBin.index');
+    $data = [
+        [
+        'id' => 1,
+        'kode_bin' => 'MH0101',
+        'nama_bin' => 'Rak MH Ganjil Level 1'
+        ],
+        [
+        'id' => 2,
+        'kode_bin' => 'MH0201',
+        'nama_bin' => 'Rak MH Genap Level 1'
+        ],
+    ];
+
+    return view('StorageBin.index', [
+        'title' => 'Storage Bin',
+        'data' => $data
+    ]);
 })->name('sbin');
