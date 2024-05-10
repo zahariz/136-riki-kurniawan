@@ -32,11 +32,11 @@
                     </form>
                 </div>
                 <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                    <x-button type="button" id="createCategoryModalButton" data-modal-target="createCategoryModal" data-modal-toggle="createCategoryModal" class="flex items-center">
+                    <x-button type="button" id="createProductModalButton" data-modal-target="createProductModal" data-modal-toggle="createProductModal" class="flex items-center">
                         <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                             <path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
                         </svg>
-                        Add category
+                        Add product
                     </x-button>
 
                 </div>
@@ -45,8 +45,9 @@
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th scope="col" class="px-4 py-4">Category</th>
-                            <th scope="col" class="px-4 py-3">Description</th>
+                            <th scope="col" class="px-4 py-4">Product</th>
+                            <th scope="col" class="px-4 py-4">SKU</th>
+                            <th scope="col" class="px-4 py-3">Category</th>
                             <th scope="col" class="px-4 py-3">
                                 <span class="sr-only">Actions</span>
                             </th>
@@ -55,18 +56,20 @@
                     <tbody>
                         @foreach ($data as $row)
                         <tr class="border-b dark:border-gray-700">
-                            <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white category">{{ $row['category_name'] }}</th>
-                            <td class="px-4 py-3 max-w-[12rem] truncate description">{{ $row['description'] }}</td>
+                            <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white name">{{ $row['name'] }}</th>
+                            <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white sku">{{ $row['sku'] }}</th>
+                            <td class="px-4 py-3 max-w-[12rem] truncate">{{ $row['category_name'] }}</td>
+                            <td class="hidden id_category">{{ $row['id_category'] }}</td>
                             <td class="px-4 py-3 flex items-center justify-end">
-                                <button id="{{ $row['category_name'] }}-dropdown-button" data-dropdown-toggle="{{ $row['category_name'] }}-dropdown" class="inline-flex items-center text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 p-1.5 dark:hover-bg-gray-800 text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100" type="button">
+                                <button id="{{ $row['name'] }}-dropdown-button" data-dropdown-toggle="{{ $row['name'] }}-dropdown" class="inline-flex items-center text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 p-1.5 dark:hover-bg-gray-800 text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100" type="button">
                                     <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
                                     </svg>
                                 </button>
-                                <div id="{{ $row['category_name'] }}-dropdown" class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
-                                    <ul class="py-1 text-sm" aria-labelledby="{{ $row['category_name'] }}-dropdown-button">
+                                <div id="{{ $row['name'] }}-dropdown" class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
+                                    <ul class="py-1 text-sm" aria-labelledby="{{ $row['name'] }}-dropdown-button">
                                         <li>
-                                            <button type="button" data-modal-target="updateCategoryModal" data-modal-toggle="updateCategoryModal" class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200 edit-category">
+                                            <button type="button" data-modal-target="updateProductModal" data-modal-toggle="updateProductModal" class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200 edit-product">
                                                 <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                     <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
                                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
@@ -75,7 +78,7 @@
                                             </button>
                                         </li>
                                         <li>
-                                            <button type="button" data-modal-target="readCategoryModal" data-modal-toggle="readCategoryModal" class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200 preview-category">
+                                            <button type="button" data-modal-target="readProductModal" data-modal-toggle="readProductModal" class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200 preview-product">
                                                 <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
                                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -145,13 +148,21 @@
 </section>
 <!-- End block -->
 <!-- Create modal -->
-<x-modal-form id="createCategoryModal" data-modal-toggle="createCategoryModal" action="{{ route('category.store') }}" method="POST" title-modal="Create Category">
+<x-modal-form id="createProductModal" data-modal-toggle="createProductModal" action="{{ route('product') }}" method="POST" title-modal="Create Product">
     @csrf
     <div>
-        <x-text-input for="name" type="text" name="name" id="category" label="Name" placeholder="Ex. Product Alergen" />
+        <x-text-input for="name" type="text" name="name" id="category" label="Name" placeholder="Ex. Full Cream Milk" />
+    </div>
+    <div>
+        <x-text-input for="sku" type="text" name="sku" id="category" label="Sku" placeholder="Ex. R000032" />
     </div>
     <div class="sm:col-span-2">
-        <x-text-area for="description" name="description" id="description" label="Description" placeholder="Type description here.." />
+        <x-select-input label="Category" for="id_category" name="id_category" id="id_category">
+            <option value="">Pilih Category</option>
+            @foreach ($category as $row)
+            <option value="{{ $row['id'] }}">{{ $row['category_name'] }}</option>
+            @endforeach
+        </x-select-input>
     </div>
     <x-slot:labelBtn>
         Create
@@ -159,13 +170,20 @@
 </x-modal-form>
 
 <!-- Update modal -->
-<x-modal-form id="updateCategoryModal" data-modal-toggle="updateCategoryModal" action="{{ route('category.store') }}" method="POST" title-modal="Update Category">
+<x-modal-form id="updateProductModal" data-modal-toggle="updateProductModal" action="{{ route('product') }}" method="POST" title-modal="Update Product">
     @csrf
     <div>
-        <x-text-input for="name" type="text" name="name" id="e_category" label="Name" placeholder="Ex. Product Alergen" />
+        <x-text-input for="name" type="text" name="name" id="e_name" label="Name" placeholder="Ex. Full Cream Milk" />
+    </div>
+    <div>
+        <x-text-input for="sku" type="text" name="sku" id="e_sku" label="Sku" placeholder="Ex. R000032" />
     </div>
     <div class="sm:col-span-2">
-        <x-text-area for="description" name="description" id="e_description" label="Description" placeholder="Type description here.." />
+        <x-select-input label="Category" for="id_category" name="id_category" id="u_id_category">
+            @foreach ($category as $row)
+            <option value="{{ $row['id'] }}" id="e_id_category">{{ $row['category_name'] }}</option>
+            @endforeach
+        </x-select-input>
     </div>
     <x-slot:labelBtn>
         Update
@@ -173,7 +191,7 @@
 </x-modal-form>
 
 <!-- Read modal -->
-<div id="readCategoryModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+<div id="readProductModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative p-4 w-full max-w-xl max-h-full">
         <!-- Modal content -->
         <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
@@ -183,7 +201,7 @@
                     <h3 class="font-semibold" >Preview</h3>
                 </div>
                 <div>
-                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 inline-flex dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="readCategoryModal">
+                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 inline-flex dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="readProductModal">
                         <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                         </svg>
@@ -191,7 +209,7 @@
                     </button>
                 </div>
             </div>
-            <dl><dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Details</dt><dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400" id="r_description"></dd><dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white" >Category</dt><dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400" id="r_category"></dd></dl>
+            <dl><dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Details</dt><dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400" id="r_description"></dd><dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white" >Product</dt><dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400" id="r_category"></dd></dl>
 
         </div>
     </div>
@@ -209,18 +227,27 @@
             document.addEventListener("DOMContentLoaded", function() {
                 document.addEventListener('click', function(event) {
                 // Periksa apakah yang diklik adalah tombol dengan kelas 'edit_expense'
-                if (event.target.classList.contains('edit-category')) {
+                if (event.target.classList.contains('edit-product')) {
                     // Temukan elemen tr terdekat dari tombol yang diklik
                     var row = event.target.closest('tr');
 
                     // Ambil nilai dari setiap kolom dalam baris tabel
-                    var category = row.querySelector('.category').innerText;
-                    console.log(category)
-                    var description = row.querySelector('.description').innerText;
+                    var name = row.querySelector('.name').innerText;
+                    var sku = row.querySelector('.sku').innerText;
+                    var idCategory = row.querySelector('.id_category').innerText;
 
                     // Masukkan nilai-nilai tersebut ke dalam elemen-elemen input dalam modal
-                    document.getElementById('e_category').value = category;
-                    document.getElementById('e_description').value = description;
+                    document.getElementById('e_name').value = name;
+                    document.getElementById('e_sku').value = sku;
+                    document.getElementById('u_id_category').value = sku;
+                    var selectElement = document.getElementById('u_id_category');
+                    for (var i = 0; i < selectElement.options.length; i++) {
+                        if (selectElement.options[i].value === idCategory) {
+                            selectElement.options[i].selected = true;
+                            break;
+                        }
+                    }
+
                 }
 
                 if (event.target.classList.contains('preview-category')) {

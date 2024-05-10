@@ -33,7 +33,7 @@
                         <span class="ml-3" sidebar-toggle-item>Dashboard</span>
                     </x-side-link>
 
-                    <x-side-link-group toggleName="master" title="Master Data" class="hidden">
+                    <x-side-link-group toggleName="master" title="Master Data" class="{{ request()->routeIs(['category', 'product', 'sbin', 'sloc']) ? '' : 'hidden' }}">
                         <x-slot:svg>
                             <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                                 fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
@@ -45,10 +45,10 @@
                                 ></path>
                             </svg>
                         </x-slot:svg>
-                        <x-side-link href="{{ route('dashboard') }}" class="transition duration-75 rounded-lg pl-11 " title="Category" />
-                        <x-side-link href="{{ route('dashboard') }}" class=" transition duration-75 rounded-lg pl-11 " title="Product" />
-                        <x-side-link href="{{ route('dashboard') }}" class=" transition duration-75 rounded-lg pl-11 " title="Storage Location" />
-                        <x-side-link href="{{ route('dashboard') }}" class=" transition duration-75 rounded-lg pl-11 " title="Storage Bin" />
+                        <x-side-link href="{{ route('category') }}" class="transition duration-75 rounded-lg pl-11 {{ request()->routeIs('category') ? 'bg-primary-500 hover:bg-primary-700 text-white' : '' }}" title="Category" />
+                        <x-side-link href="{{ route('product') }}" class=" transition duration-75 rounded-lg pl-11 {{ request()->routeIs('product') ? 'bg-primary-500 hover:bg-primary-700 text-white' : '' }}" title="Product" />
+                        <x-side-link href="{{ route('sloc') }}" class=" transition duration-75 rounded-lg pl-11 {{ request()->routeIs('sloc') ? 'bg-primary-500 hover:bg-primary-700 text-white' : '' }}" title="Storage Location" />
+                        <x-side-link href="{{ route('sbin') }}" class=" transition duration-75 rounded-lg pl-11 {{ request()->routeIs('sbin') ? 'bg-primary-500 hover:bg-primary-700 text-white' : '' }}" title="Storage Bin" />
                     </x-side-link-group>
 
 
