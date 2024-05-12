@@ -122,3 +122,9 @@ Route::get('/storage-bin', function () {
         'data' => $data
     ]);
 })->name('sbin');
+
+Route::get('/profile', function (){
+    return view('Profile.edit', [
+        'title' => 'Profile'
+    ]);
+});
