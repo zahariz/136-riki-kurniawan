@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RemoveFromStorageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -123,8 +124,31 @@ Route::get('/storage-bin', function () {
     ]);
 })->name('sbin');
 
+//
 Route::get('/profile', function (){
     return view('Profile.edit', [
         'title' => 'Profile'
     ]);
-});
+})->name('profile');
+
+// Warehouse Management
+Route::get('/warehouse/stock-report', function (){
+    return view('warehouse.StockReport.create', [
+        'title' => 'Filter Stock Report'
+    ]);
+})->name('warehouse.stock-report');
+Route::get('/warehouse/stock-report/filter', function (){
+    return view('warehouse.StockReport.index', [
+        'title' => 'Stock Report'
+    ]);
+})->name('warehouse.stock-report.filter');
+
+Route::get('/warehouse/receiving', function (){
+    return view('warehouse.Receiving.index', [
+        'title' => 'Receiving'
+    ]);
+})->name('warehouse.receiving');
+
+Route::get('/warehouse/remove-from-storage', [RemoveFromStorageController::class, 'index'])->name('warehouse.remove-from-storage');
+Route::post('/warehouse/remove-from-storage', [RemoveFromStorageController::class, 'generateSession'])->name('storeSession');
+Route::any('/warehouse/remove-from-storage/update', [RemoveFromStorageController::class, 'sessionUpdate'])->name('updateSession');

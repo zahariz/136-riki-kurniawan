@@ -50,8 +50,18 @@
                         <x-side-link href="{{ route('sloc') }}" class=" transition duration-75 rounded-lg pl-11 {{ request()->routeIs('sloc') ? 'bg-primary-500 hover:bg-primary-700 text-white' : '' }}" title="Storage Location" />
                         <x-side-link href="{{ route('sbin') }}" class=" transition duration-75 rounded-lg pl-11 {{ request()->routeIs('sbin') ? 'bg-primary-500 hover:bg-primary-700 text-white' : '' }}" title="Storage Bin" />
                     </x-side-link-group>
-
-
+                    <x-side-link-group toggleName="warehouse" title="Warehouse" class="{{ request()->routeIs(['warehouse.stock-report', 'warehouse.receiving', 'warehouse.remove-from-storage', 'warehouse.*']) ? '' : 'hidden' }}">
+                        <x-slot:svg>
+                            <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                                fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
+                                aria-hidden="true">
+                                <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M8 8v1h4V8m4 7H4a1 1 0 0 1-1-1V5h14v9a1 1 0 0 1-1 1ZM2 1h16a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1Z" />
+                            </svg>
+                        </x-slot:svg>
+                        <x-side-link href="{{ route('warehouse.receiving') }}" class="transition duration-75 rounded-lg pl-11 {{ request()->routeIs(['warehouse.receiving','warehouse.receiving.*']) ? 'bg-primary-500 hover:bg-primary-700 text-white' : '' }}" title="Receiving" />
+                        <x-side-link href="{{ route('warehouse.remove-from-storage') }}" class=" transition duration-75 rounded-lg pl-11 {{ request()->routeIs(['warehouse.remove-from-storage','warehouse.remove-from-storage.*']) ? 'bg-primary-500 hover:bg-primary-700 text-white' : '' }}" title="Remove From Storage" />
+                        <x-side-link href="{{ route('warehouse.stock-report') }}" class=" transition duration-75 rounded-lg pl-11 {{ request()->routeIs(['warehouse.stock-report','warehouse.stock-report.*']) ? 'bg-primary-500 hover:bg-primary-700 text-white' : '' }}" title="Stock Report" />
+                    </x-side-link-group>
                 </ul>
                 <div class="pt-2 space-y-2">
                     <a href="https://github.com/themesberg/flowbite-admin-dashboard" target="_blank"

@@ -1,4 +1,4 @@
-<div {{ $attributes  }} class="mt-3">
+<div {{ $attributes  }} class="mt-1">
     @if ($for !== null || $label !== null)
     <label for="{{ $for }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" >{{ $label }}:</label>
     @endif
