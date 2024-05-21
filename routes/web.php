@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReceivingController;
 use App\Http\Controllers\RemoveFromStorageController;
 use Illuminate\Support\Facades\Route;
@@ -18,52 +19,14 @@ Route::get('/home', function () {
 // Route Category
 Route::get('/category', [CategoryController::class, 'index'])->name('category');
 Route::post('/category/store', [CategoryController::class, 'store'])->name('category.store');
-Route::any('/category/{id}/update', [CategoryController::class, 'update'])->name('category.update');
-Route::any('/category/{id}/destroy', [CategoryController::class, 'destroy'])->name('category.destroy');
+Route::any('/category/{id}/update', [CategoryController::class, 'update'])->name('category.update')->where('id', '[0-9]+');
+Route::any('/category/{id}/destroy', [CategoryController::class, 'destroy'])->name('category.destroy')->where('id', '[0-9]+');
 
 // Route Product
-Route::get('/product', function () {
-    $data = [
-        [
-            'id' => 1,
-            'name' => 'Full Cream Milk',
-            'sku' => 'R0000032',
-            'id_category' => 1
-        ],
-        [
-            'id' => 2,
-            'name' => 'Sugar Local',
-            'sku' => 'R0000027',
-            'id_category' => 2
-        ]
-    ];
-    $dataCategory = [
-        [
-        'id' => 1,
-        'category_name' => 'Product Alergen',
-        'description' => 'Product alergen seperti susu, kacang dan lain sebagainya.'
-        ],
-        [
-            'id' => 2,
-            'category_name' => 'Product Sukrosa',
-            'description' => 'Produck sukrosa seperti gula, glukosa'
-        ]
-    ];
-
-    $categoryMap = array_column($dataCategory, null, 'id');
-
-    // Menggabungkan data dari kedua array berdasarkan ID kategori
-    $result = array_map(function($item) use ($categoryMap) {
-        $category = $categoryMap[$item['id_category']];
-        return array_merge($item, $category);
-    }, $data);
-
-    return view('Product.index', [
-        'title' => 'Product',
-        'data' => $result,
-        'category' => $dataCategory
-    ]);
-})->name('product');
+Route::get('/product', [ProductController::class, 'index'])->name('product');
+Route::any('/product/store', [ProductController::class, 'store'])->name('product.store');
+Route::any('/product/{id}/update', [ProductController::class, 'update'])->name('product.update')->where('id', '[0-9]+');
+Route::any('/product/{id}/destroy', [ProductController::class, 'destroy'])->name('product.destroy')->where('id', '[0-9]+');
 
 // Route Storage Location
 Route::get('/storage-location', function () {
