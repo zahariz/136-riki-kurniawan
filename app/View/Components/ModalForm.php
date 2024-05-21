@@ -9,20 +9,20 @@ use Illuminate\View\Component;
 class ModalForm extends Component
 {
     public $id;
-    public $dataModalToggle;
+    public $dataModalHide;
     public $titleModal;
     public $action;
     public $method;
     public function __construct(
         $id = null,
-        $dataModalToggle = null,
+        $dataModalHide = null,
         $titleModal = null,
         $action = null,
         $method = null
     )
     {
         $this->id = $id;
-        $this->dataModalToggle = $dataModalToggle;
+        $this->dataModalHide = $dataModalHide;
         $this->titleModal = $titleModal;
         $this->action = $action;
         $this->method = $method;

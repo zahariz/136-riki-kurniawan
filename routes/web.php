@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ReceivingController;
 use App\Http\Controllers\RemoveFromStorageController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,29 +16,10 @@ Route::get('/home', function () {
 })->name('dashboard');
 
 // Route Category
-Route::get('/category', function () {
-    $data = [
-        [
-        'id' => 1,
-        'category_name' => 'Product Alergen',
-        'description' => 'Product alergen seperti susu, kacang dan lain sebagainya.'
-        ],
-        [
-            'id' => 2,
-            'category_name' => 'Product Sukrosa',
-            'description' => 'Produck sukrosa seperti gula, glukosa'
-        ]
-    ];
-    return view('Category.index', [
-        'title' => 'Category List',
-        'data' => $data
-    ]);
-})->name('category');
-Route::post('/category/create', function () {
-    return view('Category.index', [
-        'title' => 'Category List'
-    ]);
-})->name('category.store');
+Route::get('/category', [CategoryController::class, 'index'])->name('category');
+Route::post('/category/store', [CategoryController::class, 'store'])->name('category.store');
+Route::any('/category/{id}/update', [CategoryController::class, 'update'])->name('category.update');
+Route::any('/category/{id}/destroy', [CategoryController::class, 'destroy'])->name('category.destroy');
 
 // Route Product
 Route::get('/product', function () {
@@ -143,12 +126,14 @@ Route::get('/warehouse/stock-report/filter', function (){
     ]);
 })->name('warehouse.stock-report.filter');
 
-Route::get('/warehouse/receiving', function (){
-    return view('warehouse.Receiving.index', [
-        'title' => 'Receiving'
-    ]);
-})->name('warehouse.receiving');
+Route::get('/warehouse/receiving', [ReceivingController::class, 'index'])->name('warehouse.receiving');
+Route::any('/warehouse/receiving/store', [ReceivingController::class, 'store'])->name('warehouse.receiving.store');
+Route::any('/warehouse/receiving/session-store', [ReceivingController::class, 'sessionStore'])->name('warehouse.receiving.sessionStore');
+Route::any('/warehouse/receiving/session-update', [ReceivingController::class, 'sessionUpdate'])->name('warehouse.receiving.sessionUpdate');
+Route::any('/warehouse/receiving/session-delete', [ReceivingController::class, 'sessionDestroy'])->name('warehouse.receiving.sessionDestroy');
 
 Route::get('/warehouse/remove-from-storage', [RemoveFromStorageController::class, 'index'])->name('warehouse.remove-from-storage');
-Route::post('/warehouse/remove-from-storage', [RemoveFromStorageController::class, 'generateSession'])->name('storeSession');
-Route::any('/warehouse/remove-from-storage/update', [RemoveFromStorageController::class, 'sessionUpdate'])->name('updateSession');
+Route::any('/warehouse/remove-from-storage/store', [RemoveFromStorageController::class, 'store'])->name('warehouse.remove-from-storage.store');
+Route::any('/warehouse/remove-from-storage/session-store', [RemoveFromStorageController::class, 'sessionStore'])->name('storeSession');
+Route::any('/warehouse/remove-from-storage/session-update', [RemoveFromStorageController::class, 'sessionUpdate'])->name('updateSession');
+Route::any('/warehouse/remove-from-storage/session-delete', [RemoveFromStorageController::class, 'sessionDestroy'])->name('deleteSession');
