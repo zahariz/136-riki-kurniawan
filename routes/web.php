@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReceivingController;
 use App\Http\Controllers\RemoveFromStorageController;
+use App\Http\Controllers\StorageLocationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -29,25 +30,10 @@ Route::any('/product/{id}/update', [ProductController::class, 'update'])->name('
 Route::any('/product/{id}/destroy', [ProductController::class, 'destroy'])->name('product.destroy')->where('id', '[0-9]+');
 
 // Route Storage Location
-Route::get('/storage-location', function () {
-    $data = [
-        [
-        'id' => 1,
-        'kode_sloc' => 3001,
-        'nama_sloc' => 'Gudang RM 86'
-        ],
-        [
-        'id' => 2,
-        'kode_sloc' => 3002,
-        'nama_sloc' => 'Gudang RM 88'
-        ],
-    ];
-
-    return view('StorageLocation.index', [
-        'title' => 'Storage Location',
-        'data' => $data
-    ]);
-})->name('sloc');
+Route::get('/sloc', [StorageLocationController::class, 'index'])->name('sloc');
+Route::post('/sloc/store', [StorageLocationController::class, 'store'])->name('sloc.store');
+Route::any('/sloc/{id}/update', [StorageLocationController::class, 'update'])->name('sloc.update')->where('id', '[0-9]+');
+Route::any('/sloc/{id}/destroy', [StorageLocationController::class, 'destroy'])->name('sloc.destroy')->where('id', '[0-9]+');
 
 // Route Storage Bin
 Route::get('/storage-bin', function () {
