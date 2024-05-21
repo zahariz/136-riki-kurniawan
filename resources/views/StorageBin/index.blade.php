@@ -1,6 +1,8 @@
 <x-layouts.master>
     <x-slot:head>
         <title>{{ $title }} | Simerak Web App</title>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     </x-slot:head>
     <div class="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900">
         <div class="mb-4 col-span-full xl:mb-2">
@@ -24,10 +26,13 @@
                 <div
                     class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                     <div class="w-full md:w-1/2">
-                        <form class="flex items-center">
+                        <form action="{{ route('sbin') }}" method="GET" class="flex items-center">
                             <label for="simple-search" class="sr-only">Search</label>
-                            <div class="relative w-full">
-                                <x-text-input type="text" id="simple-search" placeholder="Search" name="search" />
+                            <div class="relative flex items-center justify-between">
+                                <x-text-input class="w-full mr-2" type="text" id="simple-search" placeholder="Search" name="search" />
+                                <x-button type="submit">Search</x-button>
+                                <a href="{{ route('sbin') }}" type="button" id="reset-button" class="text-gray-600 hover:text-gray-700 dark:text-white underline text-sm ml-2">Reset</a>
+
                             </div>
                         </form>
                     </div>
@@ -81,7 +86,7 @@
                                                 <li>
                                                     <button type="button" data-modal-target="updateBinModal"
                                                         data-modal-toggle="updateBinModal"
-                                                        class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200 edit-bin">
+                                                        class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200 edit-bin" data-sbin-id="{{ $row['id'] }}">
                                                         <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg"
                                                             viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                             <path
@@ -95,7 +100,7 @@
                                                 <li>
                                                     <button type="button" data-modal-target="deleteModal"
                                                         data-modal-toggle="deleteModal"
-                                                        class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 text-red-500 dark:hover:text-red-400">
+                                                        class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 text-red-500 dark:hover:text-red-400 delete-bin" data-sbin-id="{{ $row['id'] }}">
                                                         <svg class="w-4 h-4 mr-2" viewbox="0 0 14 15" fill="none"
                                                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                                             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -113,67 +118,14 @@
                         </tbody>
                     </table>
                 </div>
-                <nav class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
-                    aria-label="Table navigation">
-                    <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                        Showing
-                        <span class="font-semibold text-gray-900 dark:text-white">1-10</span>
-                        of
-                        <span class="font-semibold text-gray-900 dark:text-white">1000</span>
-                    </span>
-                    <ul class="inline-flex items-stretch -space-x-px">
-                        <li>
-                            <a href="#"
-                                class="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                                <span class="sr-only">Previous</span>
-                                <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#"
-                                class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
-                        </li>
-                        <li>
-                            <a href="#"
-                                class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
-                        </li>
-                        <li>
-                            <a href="#" aria-current="page"
-                                class="flex items-center justify-center text-sm z-10 py-2 px-3 leading-tight text-primary-600 bg-primary-50 border border-primary-300 hover:bg-primary-100 hover:text-primary-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</a>
-                        </li>
-                        <li>
-                            <a href="#"
-                                class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">...</a>
-                        </li>
-                        <li>
-                            <a href="#"
-                                class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">100</a>
-                        </li>
-                        <li>
-                            <a href="#"
-                                class="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                                <span class="sr-only">Next</span>
-                                <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+                {{ $data->links('pagination::tailwind') }}
+
             </div>
         </div>
     </section>
     <!-- End block -->
     <!-- Create modal -->
-    <x-modal-form id="createBinModal" data-modal-toggle="createBinModal" action="{{ route('sbin') }}" method="POST"
+    <x-modal-form id="createBinModal" data-modal-hide="createBinModal" action="{{ route('sbin.store') }}" method="POST"
         title-modal="Create Bin">
         @csrf
         <div>
@@ -190,7 +142,7 @@
     </x-modal-form>
 
     <!-- Update modal -->
-    <x-modal-form id="updateBinModal" data-modal-toggle="updateBinModal" action="{{ route('sbin') }}" method="POST"
+    <x-modal-form id="updateBinModal" data-modal-hide="updateBinModal" action="" method="PUT"
         title-modal="Update Bin">
         @csrf
         <div>
@@ -209,20 +161,55 @@
     <!-- Delete modal -->
     <div id="deleteModal" tabindex="-1" aria-hidden="true"
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <form id="actionDelete" action="" method="DELETE">
+            @csrf
+            <div class="sm:col-span-2 hidden">
+                <x-text-input for="id" id="d_id" type="text" name="id" label="id"
+                    placeholder="Type id here.." />
+            </div>
         <x-modal-confirmation data-modal-hide="deleteModal">
             <x-slot:text>
                 Are you sure want to delete this category ?
             </x-slot:text>
         </x-modal-confirmation>
+        </form>
     </div>
     <x-slot:js>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
+                var status = '{{ session('status') }}';
+                var error = '{{ session('errors') }}';
+                var errors = '{{ session('error') }}';
+                // Tampilkan notifikasi SweetAlert berdasarkan status
+                if (status) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Sukses!',
+                        text: status
+                    });
+                }
+                if (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Form tidak boleh kosong!'
+                    });
+                }
+
+                if(errors) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Form tidak boleh kosong!'
+                    });
+                }
+
                 document.addEventListener('click', function(event) {
                     // Periksa apakah yang diklik adalah tombol dengan kelas 'edit_expense'
                     if (event.target.classList.contains('edit-bin')) {
                         // Temukan elemen tr terdekat dari tombol yang diklik
                         var row = event.target.closest('tr');
+                        var sbinId = event.target.dataset.sbinId;
 
                         // Ambil nilai dari setiap kolom dalam baris tabel
                         var kode_bin = row.querySelector('.kode_bin').innerText;
@@ -231,22 +218,24 @@
                         // Masukkan nilai-nilai tersebut ke dalam elemen-elemen input dalam modal
                         document.getElementById('e_kode_bin').value = kode_bin;
                         document.getElementById('e_nama_bin').value = nama_bin;
+                        document.getElementById('updateBinModal').querySelector('form').action = `/sbin/${sbinId}/update`;
+
 
                     }
-
-                    if (event.target.classList.contains('preview-category')) {
-                        // Temukan elemen tr terdekat dari tombol yang diklik
+                    if(event.target.classList.contains('delete-bin')) {
                         var row = event.target.closest('tr');
 
                         // Ambil nilai dari setiap kolom dalam baris tabel
-                        var category = row.querySelector('.category').innerText;
-                        console.log(category)
-                        var description = row.querySelector('.description').innerText;
+
+                        var sbinId = event.target.dataset.sbinId;
+                        document.getElementById('actionDelete').action = `/sbin/${sbinId}/destroy`;
+
 
                         // Masukkan nilai-nilai tersebut ke dalam elemen-elemen input dalam modal
-                        document.getElementById('r_category').innerText = category;
-                        document.getElementById('r_description').innerText = description;
+                        document.getElementById('d_id').value = sbinId;
                     }
+
+
 
 
                 });
