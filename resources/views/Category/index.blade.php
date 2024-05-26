@@ -24,12 +24,12 @@
                 <div
                     class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                     <div class="w-full md:w-1/2">
-                        <form action="{{ route('category') }}" method="GET" class="flex items-center">
+                        <form action="{{ route('category') }}" method="GET" class="flex items-center" id="search-form">
                             <label for="simple-search" class="sr-only">Search</label>
                             <div class="relative flex items-center justify-between">
                                 <x-text-input class="w-full mr-2" type="text" id="simple-search" placeholder="Search" name="search" />
-                                <x-button type="submit">Search</x-button>
-                                <a href="{{ route('category') }}" type="button" id="reset-button" class="text-gray-600 hover:text-gray-700 dark:text-white underline text-sm ml-2">Reset</a>
+                                <x-button class="submitSearch" id="search-button" type="submit">Search</x-button>
+                                <a href="{{ route('category') }}" type="button" id="reset-button" class="text-gray-600 hover:text-gray-700 dark:text-white underline text-sm ml-2 hidden">Reset</a>
 
                             </div>
                         </form>
@@ -303,6 +303,28 @@
                     }
 
 
+                });
+
+                const searchForm = document.getElementById("search-form");
+                const searchButton = document.getElementById("search-button");
+                const resetButton = document.getElementById("reset-button");
+
+                // Check Local Storage for button state
+                if (localStorage.getItem('searchSubmitted') === 'true') {
+                    searchButton.classList.add("hidden");
+                    resetButton.classList.remove("hidden");
+                }
+
+                searchForm.addEventListener("submit", function(event) {
+                    searchButton.classList.add("hidden");
+                    resetButton.classList.remove("hidden");
+                    localStorage.setItem('searchSubmitted', 'true'); // Save state to Local Storage
+                });
+
+                resetButton.addEventListener("click", function() {
+                    resetButton.classList.add("hidden");
+                    searchButton.classList.remove("hidden");
+                    localStorage.removeItem('searchSubmitted'); // Clear state from Local Storage
                 });
             });
         </script>

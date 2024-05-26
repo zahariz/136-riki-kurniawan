@@ -22,10 +22,9 @@ class RMFSessionStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'product' => ['required'],
             'batch' => ['required', 'max:9'],
-            'sloc' => ['required'],
-            'sbin' => ['required'],
+            'exp_date' => ['required'],
+            'prod_date' => ['required'],
             'qty' => ['required', 'integer'],
         ];
     }

@@ -15,7 +15,7 @@ class ModalForm extends Component
     public $method;
     public function __construct(
         $id = null,
-        $dataModalHide = null,
+        $dataModalHide = '',
         $titleModal = null,
         $action = null,
         $method = null

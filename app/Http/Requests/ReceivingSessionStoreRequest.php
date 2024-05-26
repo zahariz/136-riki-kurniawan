@@ -22,10 +22,7 @@ class ReceivingSessionStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'product' => ['required'],
             'batch' => ['required', 'max:9'],
-            'sloc' => ['required'],
-            'sbin' => ['required'],
             'qty' => ['required', 'integer'],
             'prod_date' => ['required'],
             'exp_date' => ['required'],

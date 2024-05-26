@@ -22,11 +22,13 @@ class RMFStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'product.*' => ['required'],
-            'batch.*' => ['required'],
-            'sloc.*' => ['required'],
-            'sbin.*' => ['required'],
-            'qty.*' => ['required', 'integer'],
+            'product_id.*' => 'required|exists:products,id',
+            'batch.*' => 'required|string',
+            'qty.*' => 'required|integer|min:1',
+            'exp_date.*' => 'required',
+            'prod_date.*' => 'required',
+            'sbin_id.*' => 'required|exists:storage_bins,id',
+            'sloc_id.*' => 'required|exists:storage_locations,id',
         ];
     }
 }

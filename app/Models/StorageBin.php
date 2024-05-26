@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class StorageBin extends Model
 {
@@ -17,4 +18,9 @@ class StorageBin extends Model
         'kode_bin',
         'nama_bin'
     ];
+
+    public function warehouse(): HasMany
+    {
+        return $this->hasMany(WarehouseManagement::class, 'sbin_id', 'id');
+    }
 }

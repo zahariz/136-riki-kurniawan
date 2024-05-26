@@ -33,10 +33,15 @@
                         <div class="col-span-6 sm:col-span-3">
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product</label>
                             <div class="relative" onclick="event.stopImmediatePropagation();">
-                                <input id="Product" type="text" name="product"
+                                <input id="Product" type="text" name="product_name"
                                     placeholder="Type sku product here.." autocomplete="off"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     onkeyup="onKeyUpProduct(event)" />
+                                <input id="ProductId" type="hidden" name="product_id"
+                                    placeholder="Type sku product here.." autocomplete="off"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                     />
+
                                 @error('product')
                                     <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span
                                             class="font-medium">Opps!</span> {{ $message }}</p>
@@ -59,10 +64,14 @@
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Storage
                                 Location</label>
                             <div class="relative" onclick="event.stopImmediatePropagation();">
-                                <input id="Sloc" type="text" name="sloc"
+                                <input id="Sloc" type="text" name="nama_sloc"
                                     placeholder="Type storage location code here.." autocomplete="off"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     onkeyup="onKeyUpSloc(event)" />
+                                <input id="SlocId" type="hidden" name="sloc_id"
+                                    placeholder="Type storage location code here.." autocomplete="off"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                     />
                                 @error('sloc')
                                     <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span
                                             class="font-medium">Opps!</span> {{ $message }}</p>
@@ -77,10 +86,14 @@
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Storage
                                 Bin</label>
                             <div class="relative" onclick="event.stopImmediatePropagation();">
-                                <input id="StorageBin" type="text" name="sbin"
+                                <input id="StorageBin" type="text" name="kode_bin"
                                     placeholder="Type storage bin here.." autocomplete="off"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     onkeyup="onKeyUpStorageBin(event)" />
+                                <input id="StorageBinId" type="hidden" name="sbin_id"
+                                    placeholder="Type storage bin here.." autocomplete="off"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                     />
                                 @error('sbin')
                                     <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span
                                             class="font-medium">Opps!</span> {{ $message }}</p>
@@ -142,7 +155,7 @@
                             </x-text-input>
                         </div>
                         <div class="col-span-6 sm:col-span-3 flex items-end">
-                            <x-button label="Login" type="submit">Save</x-button>
+                            <button type="submit" class="flex items-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Save</button>
                         </div>
                     </div>
                 </form>
@@ -172,14 +185,19 @@
                     @foreach (session('sessionReceiving', []) as $data)
                         <tr class="border-b dark:border-gray-700">
                             <th scope="row"
-                                class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white product">
-                                {{ $data['product'] }}</th>
+                                class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white product_id hidden">
+                                {{ $data['product_id'] }}</th>
+                            <th scope="row"
+                                class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white product_name">
+                                {{ $data['product_name'] }}</th>
                             <th scope="row"
                                 class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white batch">
                                 {{ $data['batch'] }}</th>
                             <td class="px-4 py-3 max-w-[12rem] truncate qty">{{ $data['qty'] }}</td>
-                            <td class="px-4 py-3 max-w-[12rem] truncate sloc">{{ $data['sloc'] }}</td>
-                            <td class="px-4 py-3 max-w-[12rem] truncate sbin">{{ $data['sbin'] }}</td>
+                            <td class="px-4 py-3 max-w-[12rem] truncate nama_sloc">{{ $data['nama_sloc'] }}</td>
+                            <td class="px-4 py-3 max-w-[12rem] truncate sloc_id hidden">{{ $data['sloc_id'] }}</td>
+                            <td class="px-4 py-3 max-w-[12rem] truncate kode_bin">{{ $data['kode_bin'] }}</td>
+                            <td class="px-4 py-3 max-w-[12rem] truncate sbin_id hidden">{{ $data['sbin_id'] }}</td>
                             <td class="px-4 py-3 max-w-[12rem] truncate prod_date">{{ $data['prod_date'] }}</td>
                             <td class="px-4 py-3 max-w-[12rem] truncate exp_date">{{ $data['exp_date'] }}</td>
                             <td class="px-4 py-3 max-w-[12rem] truncate uuid" hidden>{{ $data['uuid'] }}</td>
@@ -247,9 +265,12 @@
         <div>
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product</label>
             <div class="relative" onclick="event.stopImmediatePropagation();">
-                <input id="e_Product" type="text" name="e_product" placeholder="Type sku product here.."
+                <input id="e_Product" type="text" name="e_product_name" placeholder="Type sku product here.."
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     onkeyup="onKeyUpEProduct(event)" />
+                <input id="e_ProductId" type="hidden" name="e_product_id" placeholder="Type sku product here.."
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    />
                 <div id="e_dropdownProduct"
                     class="w-full h-60 border border-gray-300 rounded-md bg-white absolute z-10 overflow-y-auto hidden">
                 </div>
@@ -262,22 +283,28 @@
         <div>
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Storage Location</label>
             <div class="relative" onclick="event.stopImmediatePropagation();">
-                <input id="e_Sloc" type="text" name="e_sloc" placeholder="Type storage location code here.."
+                <input id="e_Sloc" type="text" name="e_nama_sloc" placeholder="Type storage location code here.."
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     onkeyup="onKeyUpESloc(event)" />
+                <input id="e_SlocId" type="hidden" name="e_sloc_id" placeholder="Type storage location code here.."
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                     />
                 <div id="e_dropdownSloc"
-                    class="w-full h-60 border border-gray-300 rounded-md bg-white absolute overflow-y-auto hidden">
+                    class="w-full h-60 border border-gray-300 rounded-md bg-white absolute z-10 overflow-y-auto hidden">
                 </div>
             </div>
         </div>
         <div>
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Storage Bin</label>
             <div class="relative" onclick="event.stopImmediatePropagation();">
-                <input id="e_StorageBin" type="text" name="e_sbin" placeholder="Type storage bin here.."
+                <input id="e_StorageBin" type="text" name="e_kode_bin" placeholder="Type storage bin here.."
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     onkeyup="onKeyUpEStorageBin(event)" />
+                <input id="e_StorageBinId" type="hidden" name="e_sbin_id" placeholder="Type storage bin here.."
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                     />
                 <div id="e_dropdownStorageBin"
-                    class="w-full h-60 border border-gray-300 rounded-md bg-white absolute overflow-y-auto hidden">
+                    class="w-full h-60 border border-gray-300 rounded-md bg-white absolute z-10 overflow-y-auto hidden">
                 </div>
             </div>
         </div>
@@ -353,7 +380,7 @@
             @csrf
             @foreach (session('sessionReceiving', []) as $key => $data)
             <div class="sm:col-span-2 hidden">
-                <x-text-input for="product" id="product" type="text" name="product[{{ $key }}]" label="Product" value="{{ $data['product'] }}"
+                <x-text-input for="product" id="product" type="text" name="product_id[{{ $key }}]" label="Product" value="{{ $data['product_id'] }}"
                     placeholder="Type product here.." />
             </div>
             <div class="sm:col-span-2 hidden">
@@ -365,11 +392,11 @@
                     placeholder="Type qty here.." />
             </div>
             <div class="sm:col-span-2 hidden">
-                <x-text-input for="sloc" id="sloc" type="text" name="sloc[{{ $key }}]" label="sloc" value="{{ $data['sloc'] }}"
+                <x-text-input for="sloc" id="sloc" type="text" name="sloc_id[{{ $key }}]" label="sloc" value="{{ $data['sloc_id'] }}"
                     placeholder="Type sloc here.." />
             </div>
             <div class="sm:col-span-2 hidden">
-                <x-text-input for="sbin" id="sbin" type="text" name="sbin[{{ $key }}]" label="sbin" value="{{ $data['sbin'] }}"
+                <x-text-input for="sbin" id="sbin" type="text" name="sbin_id[{{ $key }}]" label="sbin" value="{{ $data['sbin_id'] }}"
                     placeholder="Type sbin here.." />
             </div>
             <div class="sm:col-span-2 hidden">
@@ -392,38 +419,12 @@
     <x-slot name="js">
         <script>
             // Data untuk dropdown
-            let products = [{
-                    name: "Product 1",
-                    code: "P1"
-                },
-                {
-                    name: "Product 2",
-                    code: "P2"
-                },
-                // Tambahkan data produk lainnya sesuai kebutuhan
-            ];
+            let products = @json($products);
 
-            let locations = [{
-                    name: "Location 1",
-                    code: "L1"
-                },
-                {
-                    name: "Location 2",
-                    code: "L2"
-                },
-                // Tambahkan data lokasi lainnya sesuai kebutuhan
-            ];
 
-            let storageBins = [{
-                    name: "Bin 1",
-                    code: "B1"
-                },
-                {
-                    name: "Bin 2",
-                    code: "B2"
-                },
-                // Tambahkan data storage bin lainnya sesuai kebutuhan
-            ];
+            let locations = @json($sloc)
+
+            let storageBins = @json($sbin);
 
             // Fungsi untuk menangani event keyboard pada input produk
             function onKeyUpProduct(e) {
@@ -431,10 +432,21 @@
                 let dropdownEl = document.querySelector("#dropdownProduct");
                 dropdownEl.classList.remove("hidden");
                 let filteredProducts = products.filter((p) =>
-                    p.name.toLowerCase().includes(keyword.toLowerCase())
+                    p.product_name.toLowerCase().includes(keyword.toLowerCase())
                 );
 
-                renderOptions(filteredProducts, dropdownEl);
+                renderOptionsProduct(filteredProducts, dropdownEl);
+            }
+
+            function onKeyUpEProduct(e) {
+                let keyword = e.target.value;
+                let dropdownEl = document.querySelector("#e_dropdownProduct");
+                dropdownEl.classList.remove("hidden");
+                let filteredProducts = products.filter((p) =>
+                    p.product_name.toLowerCase().includes(keyword.toLowerCase())
+                );
+
+                renderOptionsProduct(filteredProducts, dropdownEl);
             }
 
             // Fungsi untuk menangani event keyboard pada input lokasi penyimpanan
@@ -443,10 +455,20 @@
                 let dropdownEl = document.querySelector("#dropdownSloc");
                 dropdownEl.classList.remove("hidden");
                 let filteredLocations = locations.filter((l) =>
-                    l.name.toLowerCase().includes(keyword.toLowerCase())
+                    l.nama_sloc.toLowerCase().includes(keyword.toLowerCase())
                 );
 
-                renderOptions(filteredLocations, dropdownEl);
+                renderOptionsSloc(filteredLocations, dropdownEl);
+            }
+            function onKeyUpESloc(e) {
+                let keyword = e.target.value;
+                let dropdownEl = document.querySelector("#e_dropdownSloc");
+                dropdownEl.classList.remove("hidden");
+                let filteredLocations = locations.filter((l) =>
+                    l.nama_sloc.toLowerCase().includes(keyword.toLowerCase())
+                );
+
+                renderOptionsSloc(filteredLocations, dropdownEl);
             }
 
             // Fungsi untuk menangani event keyboard pada input storage bin
@@ -455,22 +477,61 @@
                 let dropdownEl = document.querySelector("#dropdownStorageBin");
                 dropdownEl.classList.remove("hidden");
                 let filteredBins = storageBins.filter((b) =>
-                    b.name.toLowerCase().includes(keyword.toLowerCase())
+                    b.kode_bin.toLowerCase().includes(keyword.toLowerCase())
                 );
 
-                renderOptions(filteredBins, dropdownEl);
+                renderOptionsSbin(filteredBins, dropdownEl);
+            }
+            function onKeyUpEStorageBin(e) {
+                let keyword = e.target.value;
+                let dropdownEl = document.querySelector("#e_dropdownStorageBin");
+                dropdownEl.classList.remove("hidden");
+                let filteredBins = storageBins.filter((b) =>
+                    b.kode_bin.toLowerCase().includes(keyword.toLowerCase())
+                );
+
+                renderOptionsSbin(filteredBins, dropdownEl);
             }
 
             // Fungsi untuk merender opsi dropdown
-            function renderOptions(options, dropdownEl) {
+            function renderOptionsProduct(options, dropdownEl) {
                 let newHtml = ``;
 
                 options.forEach((option) => {
                     newHtml += `<div
-                        onclick="selectOption('${option.name}', '${dropdownEl.id}')"
+                        onclick="selectOption('${option.product_name}', '${dropdownEl.id}', '${option.id}')"
                         class="p-2.5 border-b border-gray-200 text-stone-600 cursor-pointer hover:bg-slate-100 transition-colors"
                     >
-                        ${option.name}
+                        ${option.product_name}
+                    </div>`;
+                });
+
+                dropdownEl.innerHTML = newHtml;
+            }
+
+            function renderOptionsSloc(options, dropdownEl) {
+                let newHtml = ``;
+
+                options.forEach((option) => {
+                    newHtml += `<div
+                        onclick="selectOption('${option.nama_sloc}', '${dropdownEl.id}', '${option.id}')"
+                        class="p-2.5 border-b border-gray-200 text-stone-600 cursor-pointer hover:bg-slate-100 transition-colors"
+                    >
+                        ${option.nama_sloc}
+                    </div>`;
+                });
+
+                dropdownEl.innerHTML = newHtml;
+            }
+            function renderOptionsSbin(options, dropdownEl) {
+                let newHtml = ``;
+
+                options.forEach((option) => {
+                    newHtml += `<div
+                        onclick="selectOption('${option.kode_bin}', '${dropdownEl.id}', '${option.id}')"
+                        class="p-2.5 border-b border-gray-200 text-stone-600 cursor-pointer hover:bg-slate-100 transition-colors"
+                    >
+                        ${option.kode_bin}
                     </div>`;
                 });
 
@@ -478,12 +539,15 @@
             }
 
             // Fungsi untuk memilih opsi dropdown
-            function selectOption(selectedOption, dropdownId) {
+            function selectOption(selectedOption, dropdownId, id) {
                 hideDropdown(dropdownId);
                 let inputId = dropdownId.replace("dropdown", "");
                 console.log(inputId);
                 let input = document.querySelector(`#${inputId}`);
+                let idInput = document.querySelector(`#${inputId}Id`);
+                console.log(id);
                 input.value = selectedOption;
+                idInput.value = id;
             }
 
 
@@ -536,26 +600,27 @@
                         var row = event.target.closest('tr');
 
                         // Ambil nilai dari setiap kolom dalam baris tabel
-                        var product = row.querySelector('.product').innerText;
-                        console.log(product);
+                        var product_id = row.querySelector('.product_id').innerText;
+                        var product_name = row.querySelector('.product_name').innerText;
                         var batch = row.querySelector('.batch').innerText;
                         var qty = row.querySelector('.qty').innerText;
-                        var sloc = row.querySelector('.sloc').innerText;
-                        var sbin = row.querySelector('.sbin').innerText;
+                        var sloc_id = row.querySelector('.sloc_id').innerText;
+                        var nama_sloc = row.querySelector('.nama_sloc').innerText;
+                        var sbin_id = row.querySelector('.sbin_id').innerText;
+                        var kode_bin = row.querySelector('.kode_bin').innerText;
                         var prod_date = row.querySelector('.prod_date').innerText;
                         var exp_date = row.querySelector('.exp_date').innerText;
                         var uuid = row.querySelector('.uuid').innerText;
-                        console.log(uuid);
-
-                        console.log('Production Date:', prod_date);
-                        console.log('Expired Date:', exp_date);
 
                         // Masukkan nilai-nilai tersebut ke dalam elemen-elemen input dalam modal
-                        document.getElementById('e_Product').value = product;
+                        document.getElementById('e_Product').value = product_name;
+                        document.getElementById('e_ProductId').value = product_id;
                         document.getElementById('e_batch').value = batch;
                         document.getElementById('e_qty').value = qty;
-                        document.getElementById('e_Sloc').value = sloc;
-                        document.getElementById('e_StorageBin').value = sbin;
+                        document.getElementById('e_Sloc').value = nama_sloc;
+                        document.getElementById('e_SlocId').value = sloc_id;
+                        document.getElementById('e_StorageBin').value = kode_bin;
+                        document.getElementById('e_StorageBinId').value = sbin_id;
                         document.getElementById('e_prod_date').value = prod_date;
                         document.getElementById('e_exp_date').value = exp_date;
                         document.getElementById('e_uuid').value = uuid;

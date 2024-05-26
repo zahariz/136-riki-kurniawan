@@ -5,9 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ReceivingSessionStoreRequest;
 use App\Http\Requests\ReceivingSessionUpdateRequest;
 use App\Http\Requests\ReceivingStoreRequest;
+use App\Models\Product;
+use App\Models\StorageBin;
+use App\Models\StorageLocation;
+use App\Models\Transaction;
+use App\Models\TransactionDetail;
+use App\Models\User;
+use App\Models\WarehouseManagement;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
@@ -16,52 +25,126 @@ class ReceivingController extends Controller
     public function index()
     {
         $generatedData = session('sessionReceiving', []);
+        $product = Product::all();
+        $sloc = StorageLocation::all();
+        $sbin = StorageBin::all();
+
         return view('warehouse.Receiving.index', [
             'title' => 'Receiving',
-            'sessionReceiving' => $generatedData
+            'sessionReceiving' => $generatedData,
+            'products' => $product,
+            'sloc' => $sloc,
+            'sbin' => $sbin
         ]);
     }
 
-    public function store(ReceivingStoreRequest $request) : RedirectResponse | JsonResponse
+    private function generateTransactionCode(): string
+    {
+        $currentDate = Carbon::now()->format('ymd');
+        $lastTransaction = Transaction::whereDate('created_at', Carbon::today())
+                                    ->orderBy('id', 'desc')
+                                    ->first();
+
+        if ($lastTransaction) {
+            $lastReferenceCode = $lastTransaction->transaction_code;
+            $lastSequence = (int) substr($lastReferenceCode, -4);
+            $newSequence = $lastSequence + 1;
+        } else {
+            $newSequence = 1;
+        }
+        return 'T-' . $currentDate . '-' . str_pad($newSequence, 4, '0', STR_PAD_LEFT);
+    }
+
+    public function store(ReceivingStoreRequest $request): RedirectResponse | JsonResponse
     {
         $data = $request->validated();
-        if(!$data) {
+        if (!$data) {
             return redirect()->back()->with('error', 'Form tidak boleh kosong!');
         }
-        $result = [];
+        $transactionCode = $this->generateTransactionCode();
+        $transactionType = 'IN';
+        try {
+            DB::beginTransaction();
 
-        foreach($data['product'] as $key => $value)
-        {
-            $result[] = [
-                'product' => $value,
-                'batch' => $data['batch'][$key],
-                'sloc' => $data['sloc'][$key],
-                'sbin' => $data['sbin'][$key],
-                'qty' => $data['qty'][$key],
-                'prod_date' => $data['prod_date'][$key],
-                'exp_date' => $data['exp_date'][$key],
-            ];
+            $transaction = Transaction::query()->create([
+                'transaction_code' => $transactionCode,
+                'transaction_type' => $transactionType,
+                'user_id' => 1
+            ]);
+
+            foreach ($data['product_id'] as $key => $productId) {
+                $batch = $data['batch'][$key];
+                $qty = $data['qty'][$key];
+                $expDate = Carbon::createFromFormat('d/m/Y', $data['exp_date'][$key])->format('Y-m-d');
+                $prodDate = Carbon::createFromFormat('d/m/Y', $data['prod_date'][$key])->format('Y-m-d');
+                $sbinId = $data['sbin_id'][$key];
+                $slocId = $data['sloc_id'][$key];
+
+                TransactionDetail::query()->create([
+                    'transaction_id' => $transaction->id,
+                    'product_id' => $productId,
+                    'batch' => $batch,
+                    'qty' => $qty,
+                    'exp_date' => $expDate,
+                    'prod_date' => $prodDate,
+                    'sbin_id' => $sbinId,
+                    'sloc_id' => $slocId
+                ]);
+
+                WarehouseManagement::query()->updateOrCreate(
+                    [
+                        'product_id' => $productId,
+                        'batch' => $batch,
+                        'sbin_id' => $sbinId,
+                        'sloc_id' => $slocId
+                    ],
+                    [
+                        'qty' => DB::raw("qty + $qty"),
+                        'exp_date' => $expDate,
+                        'prod_date' => $prodDate
+                    ]
+                );
+            }
+
+            DB::commit();
+            session()->forget('sessionReceiving');
+            return redirect()->route('warehouse.receiving.print',$transaction->id)->with('status', 'Data berhasil disimpan!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Something went wrong : ' . $e->getMessage());
         }
 
-        return response()->json([
-            'data' => $result
+    }
+
+    public function print(int $id)
+    {
+        $transaction = TransactionDetail::query()->with(['transaction', 'product', 'sbin', 'sloc'])->where('transaction_id', $id)->get();
+        // dd($transaction);
+        Carbon::setLocale('id');
+        return view('Warehouse.Receiving.print', [
+            'data' => $transaction,
+            'title' => 'Print Receiving'
         ]);
     }
+
 
     public function sessionStore(ReceivingSessionStoreRequest $request): RedirectResponse
     {
         $data = $request->validated();
-        if(!$data) {
+        if (!$data) {
             return redirect()->back()->with('error', 'Form tidak boleh kosong!');
         }
         $uuid = Str::random(5);
         // Menyimpan data ke dalam session
         Session::push('sessionReceiving', [
             'uuid' => $uuid,
-            'product' => $data['product'],
+            'product_name' => $request->input('product_name'),
+            'product_id' => $request->input('product_id'),
             'batch' => $data['batch'],
-            'sloc' => $data['sloc'],
-            'sbin' => $data['sbin'],
+            'nama_sloc' => $request->input('nama_sloc'),
+            'sloc_id' => $request->input('sloc_id'),
+            'kode_bin' => $request->input('kode_bin'),
+            'sbin_id' => $request->input('sbin_id'),
             'qty' => $data['qty'],
             'prod_date' => $data['prod_date'],
             'exp_date' => $data['exp_date'],
@@ -77,10 +160,13 @@ class ReceivingController extends Controller
         $generatedData = session('sessionReceiving');
         $updatedData = [
             'uuid' => $uuid,
-            'product' => $data['e_product'],
+            'product_id' => $request->input('e_product_id'),
+            'product_name' => $request->input('e_product_name'),
             'batch' => $data['e_batch'],
-            'sloc' => $data['e_sloc'],
-            'sbin' => $data['e_sbin'],
+            'sloc_id' => $request->input('e_sloc_id'),
+            'nama_sloc' => $request->input('e_nama_sloc'),
+            'sbin_id' => $request->input('e_sbin_id'),
+            'kode_bin' => $request->input('e_kode_bin'),
             'qty' => $data['e_qty'],
             'prod_date' => $data['e_prod_date'],
             'exp_date' => $data['e_exp_date'],

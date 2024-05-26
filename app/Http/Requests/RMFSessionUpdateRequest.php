@@ -22,11 +22,10 @@ class RMFSessionUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'e_product' => ['required'],
-            'e_batch' => ['required', 'max:9'],
-            'e_sloc' => ['required'],
-            'e_sbin' => ['required'],
-            'e_qty' => ['required', 'integer'],
+            'batch' => ['required', 'min:9', 'max:9'],
+            'exp_date' => ['required'],
+            'prod_date' => ['required'],
+            'qty' => ['required', 'integer'],
         ];
     }
 }

@@ -20,7 +20,7 @@ class Button extends Component
         $type = null,
         $class = null,
         $placeholder = null,
-        $dataModalToggle=null,
+        $dataModalToggle='',
         $ariaControls=null,
         $id = null
     )

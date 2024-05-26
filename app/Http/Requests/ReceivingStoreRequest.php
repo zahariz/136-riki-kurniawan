@@ -22,13 +22,13 @@ class ReceivingStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'product.*' => ['required'],
-            'batch.*' => ['required'],
-            'sloc.*' => ['required'],
-            'sbin.*' => ['required'],
-            'qty.*' => ['required', 'integer'],
-            'prod_date.*' => ['required'],
-            'exp_date.*' => ['required']
+            'product_id.*' => 'required|exists:products,id',
+            'batch.*' => 'required|string',
+            'qty.*' => 'required|integer|min:1',
+            'exp_date.*' => 'required|date_format:d/m/Y',
+            'prod_date.*' => 'required|date_format:d/m/Y',
+            'sbin_id.*' => 'required|exists:storage_bins,id',
+            'sloc_id.*' => 'required|exists:storage_locations,id',
         ];
     }
 }
