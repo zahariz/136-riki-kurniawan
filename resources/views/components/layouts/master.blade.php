@@ -18,6 +18,7 @@
         <x-layouts.footer />
     </div>
 </div>
+@include('sweetalert::alert')
 @endsection
 
 @section('js')
