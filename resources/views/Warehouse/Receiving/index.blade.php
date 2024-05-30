@@ -81,19 +81,18 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Dropdown Storage Bin -->
+                       <!-- Dropdown Storage Bin -->
                         <div class="col-span-6 sm:col-span-3">
-                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Storage
-                                Bin</label>
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Storage Bin</label>
                             <div class="relative" onclick="event.stopImmediatePropagation();">
                                 <input id="StorageBin" type="text" name="kode_bin"
                                     placeholder="Type storage bin here.." autocomplete="off"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     onkeyup="onKeyUpStorageBin(event)" />
                                 <input id="StorageBinId" type="hidden" name="sbin_id"
-                                    placeholder="Type storage bin here.." autocomplete="off"
+                                    autocomplete="off"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                     />
+                                    />
                                 @error('sbin')
                                     <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span
                                             class="font-medium">Opps!</span> {{ $message }}</p>
@@ -103,6 +102,7 @@
                                 </div>
                             </div>
                         </div>
+
 
                         <div class="col-span-6 sm:col-span-3">
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Production
@@ -418,6 +418,8 @@
 
     <x-slot name="js">
         <script>
+
+
             // Data untuk dropdown
             let products = @json($products);
 
@@ -471,26 +473,48 @@
                 renderOptionsSloc(filteredLocations, dropdownEl);
             }
 
+            document.addEventListener('DOMContentLoaded', () => {
+                // Attach keyup event listener
+                document.getElementById('StorageBin').addEventListener('keyup', onKeyUpStorageBin);
+            });
+
+
             // Fungsi untuk menangani event keyboard pada input storage bin
             function onKeyUpStorageBin(e) {
                 let keyword = e.target.value;
                 let dropdownEl = document.querySelector("#dropdownStorageBin");
                 dropdownEl.classList.remove("hidden");
-                let filteredBins = storageBins.filter((b) =>
-                    b.kode_bin.toLowerCase().includes(keyword.toLowerCase())
-                );
-
-                renderOptionsSbin(filteredBins, dropdownEl);
+                var slocId = document.getElementById('SlocId').value;
+                if (slocId) {
+                    fetch(`/sbin/${slocId}/sloc`)
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            let filteredBins = data.filter((b) =>
+                                b.kode_bin.toLowerCase().includes(keyword.toLowerCase())
+                            );
+                            renderOptionsSbin(filteredBins, dropdownEl);
+                        })
+                        .catch(error => console.error('Error fetching storage bins:', error));
+                }
             }
             function onKeyUpEStorageBin(e) {
                 let keyword = e.target.value;
                 let dropdownEl = document.querySelector("#e_dropdownStorageBin");
                 dropdownEl.classList.remove("hidden");
-                let filteredBins = storageBins.filter((b) =>
-                    b.kode_bin.toLowerCase().includes(keyword.toLowerCase())
-                );
-
-                renderOptionsSbin(filteredBins, dropdownEl);
+                var slocId = document.getElementById('SlocId').value;
+                if (slocId) {
+                    fetch(`/sbin/${slocId}/sloc`)
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            let filteredBins = data.filter((b) =>
+                                b.kode_bin.toLowerCase().includes(keyword.toLowerCase())
+                            );
+                            renderOptionsSbin(filteredBins, dropdownEl);
+                        })
+                        .catch(error => console.error('Error fetching storage bins:', error));
+                }
             }
 
             // Fungsi untuk merender opsi dropdown

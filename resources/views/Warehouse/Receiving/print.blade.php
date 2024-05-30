@@ -42,7 +42,8 @@
         <div class="flex flex-wrap flex-row">
             <div id="title-invoice" class="flex justify-between max-w-full px-4 py-4 w-full">
                 <p class="text-xl font-bold mt-3 mb-5">Print Receiving</p>
-                <button type="button" id="btn-invoice" onclick="window.print();"
+                <div>
+                    <button type="button" id="btn-invoice" onclick="window.print();"
                     class="py-2 px-4 inline-block text-center mb-3 rounded leading-5 text-gray-100 bg-indigo-500 border border-indigo-500 hover:text-white hover:bg-indigo-600 hover:ring-0 hover:border-indigo-600 focus:bg-indigo-600 focus:border-indigo-600 focus:outline-none focus:ring-0"><svg
                         xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="ltr:mr-2 rtl:ml-2 inline-block bi bi-printer" viewBox="0 0 16 16">
@@ -50,6 +51,15 @@
                         <path
                             d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z" />
                     </svg> Print</button>
+                <button type="button"  onclick="getPrint()"
+                    class="py-2 px-4 inline-block text-center mb-3 rounded leading-5 text-gray-100 bg-indigo-500 border border-indigo-500 hover:text-white hover:bg-indigo-600 hover:ring-0 hover:border-indigo-600 focus:bg-indigo-600 focus:border-indigo-600 focus:outline-none focus:ring-0"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="ltr:mr-2 rtl:ml-2 inline-block bi bi-printer" viewBox="0 0 16 16">
+                        <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z" />
+                        <path
+                            d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z" />
+                    </svg> Print Label</button>
+                </div>
             </div>
             <div class="flex-shrink max-w-full px-4 w-full mb-6">
                 <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
@@ -60,7 +70,7 @@
                                 <img class="inline-block w-12 h-auto ltr:mr-2 rtl:ml-2"
                                     src="{{ URL::to('images/logo.svg') }}"> Simerak
                             </div>
-                            <p class="text-sm">PT. Berkah Abadi<br>Bandung</p>
+                            <p class="text-sm">PT. Simerak<br>Bandung</p>
                         </div>
                         <div class="text-2xl uppercase font-bold">Receiving</div>
                     </div>
@@ -141,34 +151,19 @@
 
 
     <x-slot name="js">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/he/1.2.0/he.js"></script>
+        <script src="{{ URL::to('js/faktur/bin.js') }}"></script>
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                var status = '{{ session('status') }}';
-                var error = '{{ session('errors') }}';
-                var errors = '{{ session('error') }}';
-                // Tampilkan notifikasi SweetAlert berdasarkan status
-                if (status) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Sukses!',
-                        text: status
-                    });
-                }
-                if (error) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: 'Form tidak boleh kosong!'
-                    });
-                }
+            function getPrint(){
+                    var dataHTML = '{{ json_encode($data) }}';
 
-                if(errors) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: 'Form tidak boleh kosong!'
-                    });
+                    var dataJSON = JSON.parse(he.decode(dataHTML));
+                    console.log(dataJSON)
+
+                    printBin(dataJSON);
                 }
+            document.addEventListener("DOMContentLoaded", function() {
+
             });
         </script>
     </x-slot>

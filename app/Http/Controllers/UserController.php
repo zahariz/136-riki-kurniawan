@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserCreateRequest;
+use App\Http\Requests\UserUpdateRequest;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
@@ -52,6 +53,23 @@ class UserController extends Controller
             'data' => $users,
             'role' => $role
         ]);
+    }
+
+    public function update(int $id, UserUpdateRequest $request)
+    {
+        $user = User::where('id', $id)->first();
+        if(!$user) {
+            Alert::error('Oops!', 'User Not Found!');
+            return redirect()->back();
+        }
+        $data = $request->validated();
+        $user->fill($data);
+        $user->role_id = $request->input('role_id');
+        $user->save();
+        Alert::success('Hore!', 'User Updated Successfully');
+
+        return redirect()->route('users');
+
     }
 
     public function store(UserCreateRequest $request): RedirectResponse

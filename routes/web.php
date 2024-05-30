@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReceivingController;
 use App\Http\Controllers\RemoveFromStorageController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StorageBinController;
 use App\Http\Controllers\StorageLocationController;
 use App\Http\Controllers\UserController;
@@ -19,16 +20,19 @@ Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login.auth');
 Route::group(['middleware' => ['auth']], function(){
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
     Route::get('/home', [HomeController::class, 'dashboard'])->name('dashboard');
-
-
     // Route Users
     Route::get('/users', [UserController::class, 'index'])->name('users');
     Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
     Route::any('/user/{id}/edit', [UserController::class, 'edit'])->name('user.edit')->where('id', '[0-9]+');
     Route::any('/user/{id}/update', [UserController::class, 'update'])->name('user.update')->where('id', '[0-9]+');
     Route::any('/user/{id}/destroy', [UserController::class, 'destroy'])->name('user.destroy')->where('id', '[0-9]+');
+
+    // Route Role
+    Route::get('/roles', [RoleController::class, 'index'])->name('roles');
+    Route::post('/roles/store', [RoleController::class, 'store'])->name('roles.store');
+    Route::any('/roles/{id}/update', [RoleController::class, 'update'])->name('roles.update')->where('id', '[0-9]+');
+    Route::any('/roles/{id}/destroy', [RoleController::class, 'destroy'])->name('roles.destroy')->where('id', '[0-9]+');
 
 
     // Route Category
@@ -53,6 +57,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('/sbin', [StorageBinController::class, 'index'])->name('sbin');
     Route::post('/sbin/store', [StorageBinController::class, 'store'])->name('sbin.store');
     Route::any('/sbin/{id}/update', [StorageBinController::class, 'update'])->name('sbin.update')->where('id', '[0-9]+');
+    Route::any('/sbin/{id}/sloc', [StorageBinController::class, 'getBySlocId'])->name('sbin.slocId')->where('id', '[0-9]+');
     Route::any('/sbin/{id}/destroy', [StorageBinController::class, 'destroy'])->name('sbin.destroy')->where('id', '[0-9]+');
 
 

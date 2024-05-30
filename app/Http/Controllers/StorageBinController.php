@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorageBinCreateRequest;
 use App\Http\Requests\StorageBinUpdateRequest;
 use App\Models\StorageBin;
+use App\Models\StorageLocation;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class StorageBinController extends Controller
 {
@@ -19,33 +22,47 @@ class StorageBinController extends Controller
         $data = StorageBin::where('nama_bin', 'like', '%' . $search . '%')
         ->orWhere('kode_bin', 'like', '%' . $search . '%')
         ->paginate(10);
+
+        $sloc = StorageLocation::query()->with('sbin')->get();
         return view('StorageBin.index', [
             'title' => 'Storage Bin List',
-            'data' => $data
+            'data' => $data,
+            'sloc' => $sloc
         ]);
+    }
+
+    public function getBySlocId(int $slocId): JsonResponse
+    {
+        $data = StorageBin::query()->where('sloc_id', $slocId)->get();
+
+        return response()->json($data);
     }
 
     public function store(StorageBinCreateRequest $request):RedirectResponse
     {
         $data = $request->validated();
         $sbin = new StorageBin($data);
+        $sbin->sloc_id = $request->input('sloc_id');
         $sbin->save();
-
-        return redirect()->route('sbin')->with('status', 'Berhasil menambah data!');
+        Alert::success('Sukses', 'Berhasil Menambahkan data!');
+        return redirect()->route('sbin');
     }
 
     public function update(int $id, StorageBinUpdateRequest $request): RedirectResponse
     {
         $sbin = StorageBin::where('id', $id)->first();
         if(!$sbin) {
-            return redirect()->back()->withErrors('Something went wrong ..');
+            Alert::error('Oops!', 'Something went wrong');
+            return redirect()->back();
         }
 
         $data = $request->validated();
         $sbin->fill($data);
+        $sbin->sloc_id = $request->input('sloc_id');
         $sbin->save();
 
-        return redirect()->back()->with('status', 'Berhasil mengubah data!');
+        Alert::success('Sukses', 'Berhasil Mengubah data!');
+        return redirect()->route('sbin');
     }
 
     public function destroy(int $id)
@@ -53,10 +70,12 @@ class StorageBinController extends Controller
         $sbin = StorageBin::where('id', $id)->first();
 
         if(!$sbin) {
-            return redirect()->back()->withErrors('Something went wrong ..');
+            Alert::error('Oops!', 'Something went wrong');
+            return redirect()->back();
         }
         $sbin->delete();
-        return redirect()->back()->with('status', 'Berhasil menghapus data!');
+        Alert::success('Sukses', 'Berhasil Menghapus data!');
+        return redirect()->route('sbin');
 
     }
 }

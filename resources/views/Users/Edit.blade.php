@@ -44,8 +44,12 @@
                                 </x-text-input>
                             </div>
                             <div class="col-span-6 sm:col-span-3">
-                                <x-select-input for="qty" autocomplete="off" id="qty" type="text"
-                                    name="qty" label="Role" placeholder="Type qty here..">
+                                <x-select-input for="role_id" autocomplete="off" id="role_id" type="text"
+                                    name="role_id" label="Role" >
+                                    @foreach ($role as $row)
+                                    <option value="{{ $row['id'] }}" {{ $row['id'] == $data['role_id'] ? 'selected' : '' }}>{{ $row['role_name'] }}</option>
+                                    @endforeach
+
                                     @error('qty')
                                         <x-slot:message>{{ $message }}</x-slot:message>
                                     @enderror

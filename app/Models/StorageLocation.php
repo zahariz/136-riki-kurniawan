@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class StorageLocation extends Model
 {
@@ -17,4 +18,9 @@ class StorageLocation extends Model
         'kode_sloc',
         'nama_sloc'
     ];
+
+    public function sbin(): HasMany
+    {
+        return $this->hasMany(StorageBin::class, 'sloc_id', 'id');
+    }
 }

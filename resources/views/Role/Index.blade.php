@@ -2,7 +2,6 @@
     <x-slot:head>
         <title>{{ $title }} | Simerak Web App</title>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     </x-slot:head>
     <div class="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900">
         <div class="mb-4 col-span-full xl:mb-2">
@@ -12,7 +11,6 @@
             </x-breadcumb>
         </div>
     </div>
-
     <!-- Right Content -->
     <!-- Start block -->
     <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 antialiased">
@@ -26,26 +24,26 @@
                 <div
                     class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                     <div class="w-full md:w-1/2">
-                        <form action="{{ route('sbin') }}" method="GET" class="flex items-center" id="search-form">
+                        <form action="{{ route('roles') }}" method="GET" class="flex items-center" id="search-form">
                             <label for="simple-search" class="sr-only">Search</label>
                             <div class="relative flex items-center justify-between">
                                 <x-text-input class="w-full mr-2" type="text" id="simple-search" placeholder="Search" name="search" />
                                 <x-button class="submitSearch" id="search-button" type="submit">Search</x-button>
-                                <a href="{{ route('sbin') }}" type="button" id="reset-button" class="text-gray-600 hover:text-gray-700 dark:text-white underline text-sm ml-2 hidden">Reset</a>
+                                <a href="{{ route('roles') }}" type="button" id="reset-button" class="text-gray-600 hover:text-gray-700 dark:text-white underline text-sm ml-2 hidden">Reset</a>
 
                             </div>
                         </form>
                     </div>
                     <div
                         class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                        <x-button type="button" id="createBinModalButton" data-modal-target="createBinModal"
-                            data-modal-toggle="createBinModal" class="flex items-center">
+                        <x-button type="button" id="createRoleModalButton" data-modal-target="createRoleModal"
+                            data-modal-toggle="createRoleModal" class="flex items-center">
                             <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20"
                                 xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                 <path clip-rule="evenodd" fill-rule="evenodd"
                                     d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
                             </svg>
-                            Add bin
+                            Add Role
                         </x-button>
 
                     </div>
@@ -54,9 +52,8 @@
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
-                                <th scope="col" class="px-4 py-4">Kode Bin</th>
-                                <th scope="col" class="px-4 py-4">Storage Bin</th>
-                                <th scope="col" class="px-4 py-4">Storage Location</th>
+                                <th scope="col" class="px-4 py-4">Roles</th>
+                                <th scope="col" class="px-4 py-3">Description</th>
                                 <th scope="col" class="px-4 py-3">
                                     <span class="sr-only">Actions</span>
                                 </th>
@@ -66,14 +63,13 @@
                             @foreach ($data as $row)
                                 <tr class="border-b dark:border-gray-700">
                                     <th scope="row"
-                                        class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white kode_bin">
-                                        {{ $row['kode_bin'] }}</th>
-                                    <td class="px-4 py-3 max-w-[12rem] truncate nama_bin">{{ $row['nama_bin'] }}</td>
-                                    <td class="px-4 py-3 max-w-[12rem] truncate">{{ $row['sloc']['nama_sloc'] }}</td>
-                                    <td class="px-4 py-3 max-w-[12rem] truncate hidden sloc_id">{{ $row['sloc_id'] }}</td>
+                                        class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white role">
+                                        {{ $row['role_name'] }}</th>
+                                    <td class="px-4 py-3 max-w-[12rem] truncate desc">{{ $row['desc'] }}
+                                    </td>
                                     <td class="px-4 py-3 flex items-center justify-end">
-                                        <button id="{{ $row['nama_bin'] }}-dropdown-button"
-                                            data-dropdown-toggle="{{ $row['nama_bin'] }}-dropdown"
+                                        <button id="{{ $row['role_name'] }}-dropdown-button"
+                                            data-dropdown-toggle="{{ $row['role_name'] }}-dropdown"
                                             class="inline-flex items-center text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 p-1.5 dark:hover-bg-gray-800 text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                                             type="button">
                                             <svg class="w-5 h-5" aria-hidden="true" fill="currentColor"
@@ -82,14 +78,14 @@
                                                     d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
                                             </svg>
                                         </button>
-                                        <div id="{{ $row['nama_bin'] }}-dropdown"
+                                        <div id="{{ $row['role_name'] }}-dropdown"
                                             class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
                                             <ul class="py-1 text-sm"
-                                                aria-labelledby="{{ $row['nama_bin'] }}-dropdown-button">
+                                                aria-labelledby="{{ $row['role_name'] }}-dropdown-button">
                                                 <li>
-                                                    <button type="button" data-modal-target="updateBinModal"
-                                                        data-modal-toggle="updateBinModal"
-                                                        class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200 edit-bin" data-sbin-id="{{ $row['id'] }}">
+                                                    <button type="button" data-modal-target="updateRoleModal"
+                                                        data-modal-toggle="updateRoleModal"
+                                                        class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-gray-700 dark:text-gray-200 edit-role" data-role-id="{{ $row['id'] }}">
                                                         <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg"
                                                             viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                             <path
@@ -100,10 +96,11 @@
                                                         Edit
                                                     </button>
                                                 </li>
+
                                                 <li>
                                                     <button type="button" data-modal-target="deleteModal"
                                                         data-modal-toggle="deleteModal"
-                                                        class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 text-red-500 dark:hover:text-red-400 delete-bin" data-sbin-id="{{ $row['id'] }}">
+                                                        class="flex w-full items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 text-red-500 dark:hover:text-red-400 delete-role" data-role-id="{{ $row['id'] }}">
                                                         <svg class="w-4 h-4 mr-2" viewbox="0 0 14 15" fill="none"
                                                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                                             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -128,24 +125,16 @@
     </section>
     <!-- End block -->
     <!-- Create modal -->
-    <x-modal-form id="createBinModal" data-modal-hide="createBinModal" action="{{ route('sbin.store') }}" method="POST"
-        title-modal="Create Bin">
+    <x-modal-form id="createRoleModal" data-modal-hide="createRoleModal"
+        action="{{ route('roles.store') }}" method="POST" title-modal="Create Roles">
         @csrf
         <div>
-            <x-text-input for="kode_bin" type="text" name="kode_bin" id="kode_bin" label="Kode Bin"
-                placeholder="Ex. MH0101" />
+            <x-text-input for="name" type="text" name="role_name" id="role" label="Name"
+                placeholder="Ex. User" />
         </div>
         <div class="sm:col-span-2">
-            <x-text-input for="nama_bin" type="text" name="nama_bin" id="nama_bin" label="Nama Bin"
-                placeholder="Ex. Rak MH Ganjil Level 1" />
-        </div>
-        <div class="sm:col-span-2">
-            <x-select-input label="Storage Location" for="sloc_id" name="sloc_id" id="sloc_id">
-                <option value="">Pilih Storage Location</option>
-                @foreach ($sloc as $row)
-                    <option value="{{ $row['id'] }}">{{ $row['nama_sloc'] }}</option>
-                @endforeach
-            </x-select-input>
+            <x-text-area for="desc" name="desc" id="desc" label="Description"
+                placeholder="Type desc here.." />
         </div>
         <x-slot:labelBtn>
             Create
@@ -153,28 +142,24 @@
     </x-modal-form>
 
     <!-- Update modal -->
-    <x-modal-form id="updateBinModal" data-modal-hide="updateBinModal" action="" method="PUT"
-        title-modal="Update Bin">
+    <x-modal-form id="updateRoleModal" data-modal-hide="updateRoleModal"
+        method="POST" action="" title-modal="Update Role">
         @csrf
+        @method('PUT')
         <div>
-            <x-text-input for="kode_bin" type="text" name="kode_bin" id="e_kode_bin" label="Kode Bin"
-                placeholder="Ex. MH0101" />
+            <x-text-input for="name" type="text" name="role_name" id="e_role" label="Name"
+            placeholder="Ex. User" />
         </div>
         <div class="sm:col-span-2">
-            <x-text-input for="nama_bin" type="text" name="nama_bin" id="e_nama_bin" label="Nama Bin"
-                placeholder="Ex. Rak MH Ganjil Level 1" />
+            <x-text-area for="desc" name="desc" id="e_desc" label="Description"
+            placeholder="Type desc here.." />
         </div>
-        <div class="sm:col-span-2">
-            <x-select-input label="Storage Location" for="sloc_id" name="sloc_id" id="e_sloc_id">
-                @foreach ($sloc as $row)
-                    <option value="{{ $row['id'] }}">{{ $row['nama_sloc'] }}</option>
-                @endforeach
-            </x-select-input>
-        </div>
+        <x-text-input class="hidden" type="hidden" name="id" id="e_id" />
         <x-slot:labelBtn>
             Update
         </x-slot:labelBtn>
     </x-modal-form>
+
 
     <!-- Delete modal -->
     <div id="deleteModal" tabindex="-1" aria-hidden="true"
@@ -187,7 +172,7 @@
             </div>
         <x-modal-confirmation data-modal-hide="deleteModal">
             <x-slot:text>
-                Are you sure want to delete this category ?
+                Are you sure want to delete this role ?
             </x-slot:text>
         </x-modal-confirmation>
         </form>
@@ -195,72 +180,43 @@
     <x-slot:js>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-                var status = '{{ session('status') }}';
-                var error = '{{ session('errors') }}';
-                var errors = '{{ session('error') }}';
-                // Tampilkan notifikasi SweetAlert berdasarkan status
-                if (status) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Sukses!',
-                        text: status
-                    });
-                }
-                if (error) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: 'Form tidak boleh kosong!'
-                    });
-                }
 
-                if(errors) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: 'Form tidak boleh kosong!'
-                    });
-                }
+
 
                 document.addEventListener('click', function(event) {
                     // Periksa apakah yang diklik adalah tombol dengan kelas 'edit_expense'
-                    if (event.target.classList.contains('edit-bin')) {
+                    if (event.target.classList.contains('edit-role')) {
                         // Temukan elemen tr terdekat dari tombol yang diklik
                         var row = event.target.closest('tr');
-                        var sbinId = event.target.dataset.sbinId;
+                        var roleId = event.target.dataset.roleId;
 
                         // Ambil nilai dari setiap kolom dalam baris tabel
-                        var kode_bin = row.querySelector('.kode_bin').innerText;
-                        var nama_bin = row.querySelector('.nama_bin').innerText;
-                        var sloc_id = row.querySelector('.sloc_id').innerText;
+                        var role = row.querySelector('.role').innerText;
+                        var desc = row.querySelector('.desc').innerText;
 
                         // Masukkan nilai-nilai tersebut ke dalam elemen-elemen input dalam modal
-                        document.getElementById('e_kode_bin').value = kode_bin;
-                        document.getElementById('e_nama_bin').value = nama_bin;
-                        var select = document.getElementById('e_sloc_id');
-                        var options = select.options;
-                        for (var i = 0; i < options.length; i++) {
-                            if (options[i].value == sloc_id) {
-                                options[i].selected = true;
-                                break;
-                            }
-                        }
-                        document.getElementById('updateBinModal').querySelector('form').action = `/sbin/${sbinId}/update`;
+                        document.getElementById('e_role').value = role;
+                        document.getElementById('e_desc').value = desc;
+                        document.getElementById('e_id').value = roleId;
 
-
+                        document.getElementById('updateRoleModal').querySelector('form').action = `/roles/${roleId}/update`;
                     }
-                    if(event.target.classList.contains('delete-bin')) {
+
+
+
+                    if(event.target.classList.contains('delete-role')) {
                         var row = event.target.closest('tr');
 
                         // Ambil nilai dari setiap kolom dalam baris tabel
 
-                        var sbinId = event.target.dataset.sbinId;
-                        document.getElementById('actionDelete').action = `/sbin/${sbinId}/destroy`;
+                        var roleId = event.target.dataset.roleId;
+                        document.getElementById('actionDelete').action = `/roles/${roleId}/destroy`;
 
 
                         // Masukkan nilai-nilai tersebut ke dalam elemen-elemen input dalam modal
-                        document.getElementById('d_id').value = sbinId;
+                        document.getElementById('d_id').value = roleId;
                     }
+
 
                 });
 

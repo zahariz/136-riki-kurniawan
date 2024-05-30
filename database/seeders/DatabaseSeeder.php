@@ -19,7 +19,11 @@ class DatabaseSeeder extends Seeder
 
         Role::query()->create([
             'role_name' => 'Admin',
-            'desc' => 'Bisa akses semua fitur'
+            'desc' => 'Akses full fitur'
+        ]);
+        Role::query()->create([
+            'role_name' => 'User',
+            'desc' => 'Akses terbatas'
         ]);
 
         $roles = Role::query()->limit(1)->first();

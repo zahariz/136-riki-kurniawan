@@ -27,7 +27,7 @@ class ReceivingController extends Controller
         $generatedData = session('sessionReceiving', []);
         $product = Product::all();
         $sloc = StorageLocation::all();
-        $sbin = StorageBin::all();
+        $sbin = StorageBin::query()->with('sloc')->get();
 
         return view('warehouse.Receiving.index', [
             'title' => 'Receiving',

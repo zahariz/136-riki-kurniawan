@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('kode_bin');
             $table->string('nama_bin');
+            $table->unsignedBigInteger('sloc_id');
             $table->timestamps();
+
+            $table->foreign('sloc_id')->references('id')->on('storage_locations');
         });
     }
 
