@@ -50,7 +50,6 @@ function printBin(data){
 <center>
 <body>
     <!-- Label Palet ID -->
-    <div class="label">
     `);
     data.forEach(function(item, index) {
         var namaPelanggan = item.product.product_name;
@@ -59,17 +58,17 @@ function printBin(data){
         var sloc = item.sloc.nama_sloc;
         var QTY = item.qty;
     mywindow.document.write(`
-
+    <div class="label">
 
         <div class="label-text">#${invoice_number}</div>
         <div class="label-subtext">${namaPelanggan}</div>
         <div class="label-text">${QTY} EA</div>
         <div class="label-subtext">Sloc: ${sloc}</div>
         <div class="palette-code">${bin}</div>
+        </div>
         `);
     });
     mywindow.document.write(`
-    </div>
 
     <!-- Anda bisa menambahkan lebih banyak label sesuai kebutuhan -->
 </body>

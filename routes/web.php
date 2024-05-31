@@ -21,48 +21,7 @@ Route::post('/login', [AuthController::class, 'authenticate'])->name('login.auth
 Route::group(['middleware' => ['auth']], function(){
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/home', [HomeController::class, 'dashboard'])->name('dashboard');
-    // Route Users
-    Route::get('/users', [UserController::class, 'index'])->name('users');
-    Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
-    Route::any('/user/{id}/edit', [UserController::class, 'edit'])->name('user.edit')->where('id', '[0-9]+');
-    Route::any('/user/{id}/update', [UserController::class, 'update'])->name('user.update')->where('id', '[0-9]+');
-    Route::any('/user/{id}/update-password', [UserController::class, 'updatePassword'])->name('user.update.password')->where('id', '[0-9]+');
-    Route::any('/user/{id}/destroy', [UserController::class, 'destroy'])->name('user.destroy')->where('id', '[0-9]+');
 
-    // Route Role
-    Route::get('/roles', [RoleController::class, 'index'])->name('roles');
-    Route::post('/roles/store', [RoleController::class, 'store'])->name('roles.store');
-    Route::any('/roles/{id}/update', [RoleController::class, 'update'])->name('roles.update')->where('id', '[0-9]+');
-    Route::any('/roles/{id}/destroy', [RoleController::class, 'destroy'])->name('roles.destroy')->where('id', '[0-9]+');
-
-
-    // Route Category
-    Route::get('/category', [CategoryController::class, 'index'])->name('category');
-    Route::post('/category/store', [CategoryController::class, 'store'])->name('category.store');
-    Route::any('/category/{id}/update', [CategoryController::class, 'update'])->name('category.update')->where('id', '[0-9]+');
-    Route::any('/category/{id}/destroy', [CategoryController::class, 'destroy'])->name('category.destroy')->where('id', '[0-9]+');
-
-    // Route Product
-    Route::get('/product', [ProductController::class, 'index'])->name('product');
-    Route::any('/product/store', [ProductController::class, 'store'])->name('product.store');
-    Route::any('/product/{id}/update', [ProductController::class, 'update'])->name('product.update')->where('id', '[0-9]+');
-    Route::any('/product/{id}/destroy', [ProductController::class, 'destroy'])->name('product.destroy')->where('id', '[0-9]+');
-
-    // Route Storage Location
-    Route::get('/sloc', [StorageLocationController::class, 'index'])->name('sloc');
-    Route::post('/sloc/store', [StorageLocationController::class, 'store'])->name('sloc.store');
-    Route::any('/sloc/{id}/update', [StorageLocationController::class, 'update'])->name('sloc.update')->where('id', '[0-9]+');
-    Route::any('/sloc/{id}/destroy', [StorageLocationController::class, 'destroy'])->name('sloc.destroy')->where('id', '[0-9]+');
-
-    // Route Storage Bin
-    Route::get('/sbin', [StorageBinController::class, 'index'])->name('sbin');
-    Route::post('/sbin/store', [StorageBinController::class, 'store'])->name('sbin.store');
-    Route::any('/sbin/{id}/update', [StorageBinController::class, 'update'])->name('sbin.update')->where('id', '[0-9]+');
-    Route::any('/sbin/{id}/sloc', [StorageBinController::class, 'getBySlocId'])->name('sbin.slocId')->where('id', '[0-9]+');
-    Route::any('/sbin/{id}/destroy', [StorageBinController::class, 'destroy'])->name('sbin.destroy')->where('id', '[0-9]+');
-
-
-    //
     Route::get('/profile', function (){
         return view('Profile.edit', [
             'title' => 'Profile'
@@ -87,4 +46,48 @@ Route::group(['middleware' => ['auth']], function(){
     Route::any('/warehouse/remove-from-storage/session-store', [RemoveFromStorageController::class, 'sessionStore'])->name('storeSession');
     Route::any('/warehouse/remove-from-storage/session-update', [RemoveFromStorageController::class, 'sessionUpdate'])->name('updateSession');
     Route::any('/warehouse/remove-from-storage/session-delete', [RemoveFromStorageController::class, 'sessionDestroy'])->name('deleteSession');
+
 });
+
+    Route::group(['middleware' => ['admin', 'auth']], function() {
+        // Route Users
+        Route::get('/users', [UserController::class, 'index'])->name('users');
+        Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
+        Route::any('/user/{id}/edit', [UserController::class, 'edit'])->name('user.edit')->where('id', '[0-9]+');
+        Route::any('/user/{id}/update', [UserController::class, 'update'])->name('user.update')->where('id', '[0-9]+');
+        Route::any('/user/{id}/update-password', [UserController::class, 'updatePassword'])->name('user.update.password')->where('id', '[0-9]+');
+        Route::any('/user/{id}/destroy', [UserController::class, 'destroy'])->name('user.destroy')->where('id', '[0-9]+');
+
+        // Route Role
+        Route::get('/roles', [RoleController::class, 'index'])->name('roles');
+        Route::post('/roles/store', [RoleController::class, 'store'])->name('roles.store');
+        Route::any('/roles/{id}/update', [RoleController::class, 'update'])->name('roles.update')->where('id', '[0-9]+');
+        Route::any('/roles/{id}/destroy', [RoleController::class, 'destroy'])->name('roles.destroy')->where('id', '[0-9]+');
+
+
+        // Route Category
+        Route::get('/category', [CategoryController::class, 'index'])->name('category');
+        Route::post('/category/store', [CategoryController::class, 'store'])->name('category.store');
+        Route::any('/category/{id}/update', [CategoryController::class, 'update'])->name('category.update')->where('id', '[0-9]+');
+        Route::any('/category/{id}/destroy', [CategoryController::class, 'destroy'])->name('category.destroy')->where('id', '[0-9]+');
+
+        // Route Product
+        Route::get('/product', [ProductController::class, 'index'])->name('product');
+        Route::any('/product/store', [ProductController::class, 'store'])->name('product.store');
+        Route::any('/product/{id}/update', [ProductController::class, 'update'])->name('product.update')->where('id', '[0-9]+');
+        Route::any('/product/{id}/destroy', [ProductController::class, 'destroy'])->name('product.destroy')->where('id', '[0-9]+');
+
+        // Route Storage Location
+        Route::get('/sloc', [StorageLocationController::class, 'index'])->name('sloc');
+        Route::post('/sloc/store', [StorageLocationController::class, 'store'])->name('sloc.store');
+        Route::any('/sloc/{id}/update', [StorageLocationController::class, 'update'])->name('sloc.update')->where('id', '[0-9]+');
+        Route::any('/sloc/{id}/destroy', [StorageLocationController::class, 'destroy'])->name('sloc.destroy')->where('id', '[0-9]+');
+
+        // Route Storage Bin
+        Route::get('/sbin', [StorageBinController::class, 'index'])->name('sbin');
+        Route::post('/sbin/store', [StorageBinController::class, 'store'])->name('sbin.store');
+        Route::any('/sbin/{id}/update', [StorageBinController::class, 'update'])->name('sbin.update')->where('id', '[0-9]+');
+        Route::any('/sbin/{id}/sloc', [StorageBinController::class, 'getBySlocId'])->name('sbin.slocId')->where('id', '[0-9]+');
+        Route::any('/sbin/{id}/destroy', [StorageBinController::class, 'destroy'])->name('sbin.destroy')->where('id', '[0-9]+');
+    });
+

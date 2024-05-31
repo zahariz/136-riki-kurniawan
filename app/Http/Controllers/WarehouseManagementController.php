@@ -67,7 +67,10 @@ class WarehouseManagementController extends Controller
                     ->with(['transaction', 'product', 'sloc', 'sbin'])
                     ->where('batch', 'like', '%'. $search . '%')
                     ->orWhereHas('transaction', function($query) use ($search) {
-                        $query->where('transaction_code', 'like', '%'. $search . '%');
+                        $query->whereHas('user', function($query) use ($search) {
+                            $query->where('name', 'like', '%'. $search . '%');
+                        });
+                        $query->orWhere('transaction_code', 'like', '%'. $search . '%');
                         $query->orWhere('transaction_type', 'like', '%'. $search . '%');
                     })
                     ->orWhereHas('product', function ($query) use($search) {
@@ -80,7 +83,6 @@ class WarehouseManagementController extends Controller
                         $query->where('nama_sloc', 'like', '%'. $search . '%');
                     })
                     ->paginate(10);
-        // dd($data);
         return view('Warehouse.History.index', [
             'title' => 'Transaction History',
             'data' => $data

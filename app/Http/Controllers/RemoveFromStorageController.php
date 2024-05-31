@@ -71,7 +71,6 @@ class RemoveFromStorageController extends Controller
         $inputIds = $request->input('id');
         $inputQuantities = $data['qty'];
 
-        // Retrieve all WarehouseManagement records in one query
         $warehouseItems = WarehouseManagement::whereIn('id', $inputIds)->get()->keyBy('id');
         $transactionCode = $this->generateTransactionCode();
         $transactionType = 'OUT';
@@ -81,7 +80,7 @@ class RemoveFromStorageController extends Controller
             $transaction = Transaction::query()->create([
                 'transaction_code' => $transactionCode,
                 'transaction_type' => $transactionType,
-                'user_id' => 1
+                'user_id' => Auth::user()->id
             ]);
             foreach ($inputIds as $key => $value) {
                 $wm = $warehouseItems->get($value);

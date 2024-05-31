@@ -43,6 +43,7 @@
                                 <th scope="col" class="px-4 py-4">Batch</th>
                                 <th scope="col" class="px-4 py-4">Qty</th>
                                 <th scope="col" class="px-4 py-4">Transaction Date</th>
+                                <th scope="col" class="px-4 py-4">Created By</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -55,6 +56,7 @@
                                     <td class="px-4 py-3 max-w-[12rem] truncate ">{{ $row['batch'] }}</td>
                                     <td class="px-4 py-3 max-w-[12rem] truncate ">{{ $row['qty'] }}</td>
                                     <td class="px-4 py-3 max-w-[12rem] truncate ">{{ \Carbon\Carbon::parse($row['transaction']['transaction_date'])->translatedFormat('d F Y H:i')  }}</td>
+                                    <td class="px-4 py-3 max-w-[12rem] truncate ">{{ $row['transaction']['user']['name'] }}</td>
                                 </tr>
                             @endforeach
 
