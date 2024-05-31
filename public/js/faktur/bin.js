@@ -62,7 +62,7 @@ function printBin(data){
 
         <div class="label-text">#${invoice_number}</div>
         <div class="label-subtext">${namaPelanggan}</div>
-        <div class="label-text">${QTY} EA</div>
+        <div class="label-text">${QTY} Kg</div>
         <div class="label-subtext">Sloc: ${sloc}</div>
         <div class="palette-code">${bin}</div>
         </div>
