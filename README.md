@@ -67,3 +67,12 @@ Run the dev server (the output will give the address):
 ```sh
 php artisan serve
 ```
+
+
+## Login sebagai Admin
+- Username : zahariz
+- Password : rahasia
+
+## Login sebagai User
+- Username : fulans
+- Password : rahasia

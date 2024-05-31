@@ -26,16 +26,25 @@ class DatabaseSeeder extends Seeder
             'desc' => 'Akses terbatas'
         ]);
 
-        $roles = Role::query()->limit(1)->first();
+        $rolesAdmin = Role::query()->where('role_name', 'Admin')->first();
+        $rolesUser = Role::query()->where('role_name', 'User')->first();
 
         $data = [
-            'name' => 'Test User',
+            'name' => 'Orang Ganteng dan Intelek',
             'username' => 'zahariz',
             'password' => Hash::make('rahasia'),
-            'role_id' => $roles->id
+            'role_id' => $rolesAdmin->id
         ];
-
         $user = new User($data);
+        $user->save();
+
+        $dataUser = [
+            'name' => 'Orang Ganteng',
+            'username' => 'fulans',
+            'password' => Hash::make('rahasia'),
+            'role_id' => $rolesUser->id
+        ];
+        $user = new User($dataUser);
         $user->save();
     }
 }
