@@ -58,7 +58,9 @@
                         Apps
                     </div>
                     <div class="grid grid-cols-3 gap-4 p-4">
-                        <a href="index.html#"
+                        @if (Auth::user()->role_id == 1)
+
+                        <a href="{{ route('roles') }}"
                             class="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600">
                             <svg class="mx-auto mb-1 text-gray-500 w-7 h-7 dark:text-gray-400" fill="currentColor"
                                 viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -68,7 +70,7 @@
                             </svg>
                             <div class="text-sm font-medium text-gray-900 dark:text-white">Role</div>
                         </a>
-                        <a href="index.html#"
+                        <a href="{{ route('users') }}"
                             class="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600">
                             <svg class="mx-auto mb-1 text-gray-500 w-7 h-7 dark:text-gray-400" fill="currentColor"
                                 viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -78,7 +80,7 @@
                             </svg>
                             <div class="text-sm font-medium text-gray-900 dark:text-white">Users</div>
                         </a>
-                        <a href="index.html#"
+                        <a href="{{ route('category') }}"
                             class="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600">
                             <svg class="mx-auto mb-1 text-gray-500 w-7 h-7 dark:text-gray-400" fill="currentColor"
                                 viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -88,7 +90,7 @@
                             </svg>
                             <div class="text-sm font-medium text-gray-900 dark:text-white">Category</div>
                         </a>
-                        <a href="index.html#"
+                        <a href="{{ route('sloc') }}"
                             class="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600">
                             <svg class="mx-auto mb-1 text-gray-500 w-7 h-7 dark:text-gray-400" fill="currentColor"
                                 viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -98,7 +100,7 @@
                             </svg>
                             <div class="text-sm font-medium text-gray-900 dark:text-white">Storage Location</div>
                         </a>
-                        <a href="index.html#"
+                        <a href="{{ route('sbin') }}"
                             class="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600">
                             <svg class="mx-auto mb-1 text-gray-500 w-7 h-7 dark:text-gray-400" fill="currentColor"
                                 viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -108,7 +110,7 @@
                             </svg>
                             <div class="text-sm font-medium text-gray-900 dark:text-white">Storage Bin</div>
                         </a>
-                        <a href="index.html#"
+                        <a href="{{ route('product') }}"
                             class="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600">
                             <svg class="mx-auto mb-1 text-gray-500 w-7 h-7 dark:text-gray-400" fill="currentColor"
                                 viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -119,7 +121,10 @@
                             </svg>
                             <div class="text-sm font-medium text-gray-900 dark:text-white">Products</div>
                         </a>
-                        <a href="index.html#"
+                        @endif
+
+
+                        <a href="{{ route('warehouse.receiving') }}"
                             class="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600">
                             <svg class="mx-auto mb-1 text-gray-500 w-7 h-7 dark:text-gray-400" fill="currentColor"
                                 viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -132,7 +137,7 @@
                             </svg>
                             <div class="text-sm font-medium text-gray-900 dark:text-white">Receiving</div>
                         </a>
-                        <a href="index.html#"
+                        <a href="{{ route('warehouse.remove-from-storage') }}"
                             class="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600">
                             <svg class="mx-auto mb-1 text-gray-500 w-7 h-7 dark:text-gray-400" fill="currentColor"
                                 viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -142,16 +147,21 @@
                             </svg>
                             <div class="text-sm font-medium text-gray-900 dark:text-white">Remove From Storage</div>
                         </a>
-                        <a href="index.html#"
-                            class="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600">
-                            <svg class="mx-auto mb-1 text-gray-500 w-7 h-7 dark:text-gray-400" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1">
-                                </path>
-                            </svg>
-                            <div class="text-sm font-medium text-gray-900 dark:text-white">Logout</div>
-                        </a>
+
+
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit"
+                                class="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600">
+                                <svg class="mx-auto mb-1 text-gray-500 w-7 h-7 dark:text-gray-400" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1">
+                                    </path>
+                                </svg>
+                                <div class="text-sm font-medium text-gray-900 dark:text-white">Logout</div>
+                            </button>
+                        </form>
                     </div>
                 </div>
                 <button id="theme-toggle" data-tooltip-target="tooltip-toggle" type="button"
