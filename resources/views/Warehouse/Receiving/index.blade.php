@@ -88,7 +88,7 @@
                                 <input id="StorageBin" type="text" name="kode_bin"
                                     placeholder="Type storage bin here.." autocomplete="off"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    onkeyup="onKeyUpStorageBin(event)" />
+                                    onkeyup="onKeyUpStorageBin(event)" onchange="handleStorageLocationChange()" />
                                 <input id="StorageBinId" type="hidden" name="sbin_id"
                                     autocomplete="off"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -198,8 +198,10 @@
                             <td class="px-4 py-3 max-w-[12rem] truncate sloc_id hidden">{{ $data['sloc_id'] }}</td>
                             <td class="px-4 py-3 max-w-[12rem] truncate kode_bin">{{ $data['kode_bin'] }}</td>
                             <td class="px-4 py-3 max-w-[12rem] truncate sbin_id hidden">{{ $data['sbin_id'] }}</td>
-                            <td class="px-4 py-3 max-w-[12rem] truncate prod_date">{{ $data['prod_date'] }}</td>
-                            <td class="px-4 py-3 max-w-[12rem] truncate exp_date">{{ $data['exp_date'] }}</td>
+                            <td class="px-4 py-3 max-w-[12rem] truncate ">{{ \Carbon\Carbon::parse($data['prod_date'])->translatedFormat('d F Y')  }}</td>
+                            <td class="px-4 py-3 max-w-[12rem] truncate prod_date hidden">{{ $data['prod_date'] }}</td>
+                            <td class="px-4 py-3 max-w-[12rem] truncate ">{{ \Carbon\Carbon::parse($data['exp_date'])->translatedFormat('d F Y')  }}</td>
+                            <td class="px-4 py-3 max-w-[12rem] truncate exp_date hidden">{{ $data['exp_date'] }}</td>
                             <td class="px-4 py-3 max-w-[12rem] truncate uuid" hidden>{{ $data['uuid'] }}</td>
                             <td class="px-4 py-3 flex items-center justify-end">
                                 <button id="{{ $data['uuid'] }}-dropdown-button"
@@ -428,6 +430,20 @@
 
             let storageBins = @json($sbin);
 
+            // Function to handle storage location change
+            function handleStorageLocationChange() {
+                // Clear storage bin input and hidden ID input
+                document.getElementById('StorageBin').value = '';
+                document.getElementById('StorageBinId').value = '';
+                // Hide the storage bin dropdown
+                hideDropdown('dropdownStorageBin');
+                // Optionally, you can also clear any existing dropdown options
+                document.getElementById('dropdownStorageBin').innerHTML = '';
+
+                // Trigger loading storage bins for the new storage location
+                loadStorageBins();
+            }
+
             // Fungsi untuk menangani event keyboard pada input produk
             function onKeyUpProduct(e) {
                 let keyword = e.target.value;
@@ -461,6 +477,16 @@
                 );
 
                 renderOptionsSloc(filteredLocations, dropdownEl);
+
+                document.getElementById('StorageBin').value = '';
+                document.getElementById('StorageBinId').value = '';
+                // Hide the storage bin dropdown
+                hideDropdown('dropdownStorageBin');
+                // Optionally, you can also clear any existing dropdown options
+                document.getElementById('dropdownStorageBin').innerHTML = '';
+
+                // Trigger loading storage bins for the new storage location
+                loadStorageBins();
             }
             function onKeyUpESloc(e) {
                 let keyword = e.target.value;
@@ -471,38 +497,72 @@
                 );
 
                 renderOptionsSloc(filteredLocations, dropdownEl);
+
+                document.getElementById('e_StorageBin').value = '';
+                document.getElementById('e_StorageBinId').value = '';
+                // Hide the storage bin dropdown
+                hideDropdown('e_dropdownStorageBin');
+                // Optionally, you can also clear any existing dropdown options
+                document.getElementById('e_dropdownStorageBin').innerHTML = '';
+                loadStorageBins();
             }
 
             document.addEventListener('DOMContentLoaded', () => {
                 // Attach keyup event listener
                 document.getElementById('StorageBin').addEventListener('keyup', onKeyUpStorageBin);
+
+                // Fungsi untuk menangani event keyboard pada input storage bin
+                function onKeyUpStorageBin(e) {
+                    let keyword = e.target.value;
+                    let dropdownEl = document.querySelector("#dropdownStorageBin");
+                    dropdownEl.classList.remove("hidden");
+
+                    var slocId = document.getElementById('SlocId').value;
+                    if (slocId) {
+                        fetch(`/sbin/${slocId}/sloc`)
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log('Fetched data:', data); // Debugging log
+                                if (Array.isArray(data)) { // Check if data is an array
+                                    let filteredBins = data.filter((b) =>
+                                        b.kode_bin.toLowerCase().includes(keyword.toLowerCase())
+                                    );
+                                    renderOptionsSbin(filteredBins, dropdownEl);
+                                } else {
+                                    console.error('Error: Data is not an array', data);
+                                }
+                            })
+                            .catch(error => console.error('Error fetching storage bins:', error));
+                    }
+                }
+
             });
 
-
-            // Fungsi untuk menangani event keyboard pada input storage bin
-            function onKeyUpStorageBin(e) {
-                let keyword = e.target.value;
-                let dropdownEl = document.querySelector("#dropdownStorageBin");
-                dropdownEl.classList.remove("hidden");
+            // Function to load storage bins based on the selected storage location
+            function loadStorageBins() {
                 var slocId = document.getElementById('SlocId').value;
                 if (slocId) {
                     fetch(`/sbin/${slocId}/sloc`)
                         .then(response => response.json())
                         .then(data => {
-                            console.log(data);
-                            let filteredBins = data.filter((b) =>
-                                b.kode_bin.toLowerCase().includes(keyword.toLowerCase())
-                            );
-                            renderOptionsSbin(filteredBins, dropdownEl);
+                            console.log('Fetched data:', data); // Debugging log
+                            if (Array.isArray(data)) { // Check if data is an array
+                                renderOptionsSbin(data, document.getElementById('dropdownStorageBin'));
+                            } else {
+                                console.error('Error: Data is not an array', data);
+                            }
                         })
                         .catch(error => console.error('Error fetching storage bins:', error));
                 }
             }
+
+
+
             function onKeyUpEStorageBin(e) {
                 let keyword = e.target.value;
                 let dropdownEl = document.querySelector("#e_dropdownStorageBin");
                 dropdownEl.classList.remove("hidden");
-                var slocId = document.getElementById('SlocId').value;
+                var slocId = document.getElementById('e_SlocId').value;
                 if (slocId) {
                     fetch(`/sbin/${slocId}/sloc`)
                         .then(response => response.json())

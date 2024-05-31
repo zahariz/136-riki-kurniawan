@@ -21,7 +21,8 @@ class HomeController extends Controller
         $transaksi = TransactionDetail::query()
         ->with(['transaction', 'product', 'sloc', 'sbin'])
         ->limit(5)
-        ->latest();
+        ->latest()
+        ->get();
         return view('Dashboard.index', [
             'title' => 'Analytical Dashboard',
             'emptyBinTotal' => $emptyBinTotal,

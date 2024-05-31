@@ -67,8 +67,9 @@
                     <div class="flex flex-row justify-between py-3">
                         <div class="flex-1">
                             <p><strong>Created by:</strong><br>
+                                {{ $user[0]['user']['name'] }}
                                 <br>
-                                +123 456 7890</p>
+                                </p>
                         </div>
                         <div class="flex-1">
                             <div class="flex justify-between mb-2">

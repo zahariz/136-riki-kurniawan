@@ -120,9 +120,13 @@ class ReceivingController extends Controller
     {
         $transaction = TransactionDetail::query()->with(['transaction', 'product', 'sbin', 'sloc'])->where('transaction_id', $id)->get();
         // dd($transaction);
+        $user = Transaction::query()->with('user')
+                                    ->where('id', $id)
+                                    ->get();
         Carbon::setLocale('id');
         return view('Warehouse.Receiving.print', [
             'data' => $transaction,
+            'user' => $user,
             'title' => 'Print Receiving'
         ]);
     }

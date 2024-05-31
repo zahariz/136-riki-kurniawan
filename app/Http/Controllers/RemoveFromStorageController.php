@@ -11,6 +11,7 @@ use App\Models\StorageBin;
 use App\Models\StorageLocation;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
+use App\Models\User;
 use App\Models\WarehouseManagement;
 use Carbon\Carbon;
 use Faker\Core\Number;
@@ -19,6 +20,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -155,9 +157,14 @@ class RemoveFromStorageController extends Controller
     {
         $transaction = TransactionDetail::query()->with(['transaction', 'product', 'sbin', 'sloc'])->where('transaction_id', $id)->get();
         // dd($transaction);
+        $user = Transaction::query()->with('user')
+                                    ->where('id', $id)
+                                    ->get();
+        // dd($transaction);
         // Carbon::setLocale('id');
         return view('Warehouse.RemoveFromStorage.print', [
             'data' => $transaction,
+            'user' => $user,
             'title' => 'Print Remove From Storage'
         ]);
     }
