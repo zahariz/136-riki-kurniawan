@@ -66,6 +66,45 @@
     </section>
     <!-- End block -->
 
+    <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 antialiased">
+        <div class="mx-auto max-w-screen-3xl px-4 lg:px-12">
+
+            <!-- Start coding here -->
+            <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+                <h5 id="drawer-label"
+                    class="inline-flex items-center text-sm font-semibold text-gray-500 p-6 uppercase dark:text-gray-400">
+                    Change Password</h5>
+                    <form action="{{ route('user.update.password', $data['id']) }}" method="POST">
+                        @csrf
+                        <div class="grid grid-cols-6 gap-6 p-3">
+
+                            <div class="col-span-6 sm:col-span-3">
+                                <x-text-input for="password" id="password" type="password" autocomplete="off" name="password"
+                                    label="Password" placeholder="Type password here.." >
+                                    @error('password')
+                                        <x-slot:message>{{ $message }}</x-slot:message>
+                                    @enderror
+                                </x-text-input>
+                            </div>
+                            <div class="col-span-6 sm:col-span-3">
+                                <x-text-input for="confirm-password" id="confirm-password" type="password" autocomplete="off" name="confirm-password"
+                                    label="Confirm Password" placeholder="Type confirm password here..">
+                                    @error('confirm-password')
+                                        <x-slot:message>{{ $message }}</x-slot:message>
+                                    @enderror
+                                </x-text-input>
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-3 flex items-end">
+                                <button type="submit" class="flex items-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Save</button>
+                            </div>
+                        </div>
+                    </form>
+
+            </div>
+        </div>
+    </section>
+
     <x-slot:js>
         <script>
             document.addEventListener("DOMContentLoaded", function() {

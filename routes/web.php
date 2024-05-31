@@ -26,6 +26,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
     Route::any('/user/{id}/edit', [UserController::class, 'edit'])->name('user.edit')->where('id', '[0-9]+');
     Route::any('/user/{id}/update', [UserController::class, 'update'])->name('user.update')->where('id', '[0-9]+');
+    Route::any('/user/{id}/update-password', [UserController::class, 'updatePassword'])->name('user.update.password')->where('id', '[0-9]+');
     Route::any('/user/{id}/destroy', [UserController::class, 'destroy'])->name('user.destroy')->where('id', '[0-9]+');
 
     // Route Role

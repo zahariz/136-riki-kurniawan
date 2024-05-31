@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserCreateRequest;
+use App\Http\Requests\UserUpdatePasswordRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\Role;
 use App\Models\User;
@@ -70,6 +71,22 @@ class UserController extends Controller
 
         return redirect()->route('users');
 
+    }
+
+    public function updatePassword(int $id, UserUpdatePasswordRequest $request)
+    {
+        $user = User::where('id', $id)->first();
+        if(!$user) {
+            Alert::error('Oops!', 'User Not Found!');
+            return redirect()->back();
+        }
+
+        $data = $request->validated();
+        $user->fill($data);
+        $user->save();
+        Alert::success('Hore!', 'User Password Successfully updated');
+
+        return redirect()->route('users');
     }
 
     public function store(UserCreateRequest $request): RedirectResponse
