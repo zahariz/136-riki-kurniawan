@@ -7,25 +7,25 @@
         <div class="grid w-full grid-cols-1 gap-4 mt-4 xl:grid-cols-4 2xl:grid-cols-4 mb-4">
             <div class="border-2 rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72 flex items-center justify-center">
                 <div class="flex flex-col items-center justify-center">
-                    <dt class="mb-2 text-3xl font-extrabold">{{ $emptyBinTotal !== null ? $emptyBinTotal : 0 }}</dt>
+                    <dt class="mb-2 text-3xl font-extrabold"><span class="dark:text-white">{{ $emptyBinTotal !== null ? $emptyBinTotal : 0 }}</span></dt>
                     <dd class="text-gray-500 dark:text-gray-400 font-bold text-xl">Empty Bin</dd>
                 </div>
             </div>
             <div class="border-2 rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72 flex items-center justify-center">
                 <div class="flex flex-col items-center justify-center">
-                    <dt class="mb-2 text-3xl font-extrabold">{{ $filledBinTotal !== null ? $filledBinTotal : 0 }}</dt>
+                    <dt class="mb-2 text-3xl font-extrabold"><span class="dark:text-white">{{ $filledBinTotal !== null ? $filledBinTotal : 0 }}</span></dt>
                     <dd class="text-gray-500 dark:text-gray-400 font-bold text-xl">Filled Bin</dd>
                 </div>
             </div>
             <div class="border-2 rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72 flex items-center justify-center">
                 <div class="flex flex-col items-center justify-center">
-                    <dt class="mb-2 text-3xl font-extrabold">{{ $productTotal !== null ? $productTotal : 0 }}</dt>
+                    <dt class="mb-2 text-3xl font-extrabold"><span class="dark:text-white">{{ $productTotal !== null ? $productTotal : 0 }}</span></dt>
                     <dd class="text-gray-500 dark:text-gray-400 font-bold text-xl">Total Products</dd>
                 </div>
             </div>
             <div class="border-2 rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72 flex items-center justify-center">
                 <div class="flex flex-col items-center justify-center">
-                    <dt class="mb-2 text-3xl font-extrabold">{{ $locationTotal !== null ? $locationTotal : 0 }}</dt>
+                    <dt class="mb-2 text-3xl font-extrabold"><span class="dark:text-white">{{ $locationTotal !== null ? $locationTotal : 0 }}</span></dt>
                     <dd class="text-gray-500 dark:text-gray-400 font-bold text-xl">Total Location</dd>
                 </div>
             </div>
